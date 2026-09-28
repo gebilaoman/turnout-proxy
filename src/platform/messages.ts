@@ -1,6 +1,7 @@
 // 界面 ↔ 后台的类型化消息（@webext-core/messaging）。界面只读状态、发命令；业务处理在后台。
 import { defineExtensionMessaging } from '@webext-core/messaging';
 import type { ConfigBackup, ConfigIssue, ImportError, PersistedConfig, PortState, ProxyScheme, RuntimeState } from '@/core/config';
+import type { RouteExplanation } from '@/core/pac';
 import type { RuleStats } from '@/core/rules';
 
 export interface RulesInfo {
@@ -31,6 +32,9 @@ export type CommandResult = { ok: true } | { ok: false; code: string; issues?: C
 export interface ProtocolMap {
   getView(): ViewState;
   saveConfig(config: PersistedConfig): CommandResult;
+  saveConfigWithBackup(config: PersistedConfig): CommandResult;
+  refreshExitIp(): void;
+  explain(url: string): RouteExplanation;
   switchBack(): CommandResult;
   dismissAlert(): void;
   recheck(scope: 'active' | 'all'): void;

@@ -6,6 +6,7 @@ import { sendMessage } from '@/platform/view';
 import { Button, uiClass as ui } from '@/ui/components';
 import { formatDate } from '@/ui/format';
 import s from './Options.module.css';
+import { ZeroOmegaImport } from './ZeroOmegaImport';
 
 function importErrorText(e: ImportError): string {
   switch (e.code) {
@@ -84,6 +85,13 @@ export function BackupSection({ view }: { view: ViewState }) {
             />
           </label>
         </div>
+        <ZeroOmegaImport
+          config={view.config}
+          onDone={(m) => {
+            setMessage(m);
+            reload();
+          }}
+        />
       </div>
       {message && <div className={message.ok ? s.ok : ui.error}>{message.text}</div>}
 
@@ -102,7 +110,6 @@ export function BackupSection({ view }: { view: ViewState }) {
           </div>
         ))}
       </div>
-      <div className={s.dashed}>{i18n.t('options.backup.zeroOmegaNote')}</div>
     </section>
   );
 }

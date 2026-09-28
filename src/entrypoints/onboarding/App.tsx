@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { i18n } from '#i18n';
 import { defaultConfig, validateConfig, type Client, type Mode, type PersistedConfig, type ProxyScheme } from '@/core/config';
 import type { ScanHit, ViewState } from '@/platform/messages';
-import { requestOriginPermission, sendMessage, subscribeView } from '@/platform/view';
+import { openOptions, requestOriginPermission, sendMessage, subscribeView } from '@/platform/view';
 import { Button, Logo, uiClass as ui, useSubscription } from '@/ui/components';
 import { schemeLabel, newClientId } from '@/ui/format';
 import s from './Onboarding.module.css';
@@ -198,6 +198,16 @@ export function App() {
             </div>
             {error && <div className={ui.error}>{error}</div>}
             <div className={s.footer}>
+              <a
+                href="#"
+                className={s.importLink}
+                onClick={(e) => {
+                  e.preventDefault();
+                  openOptions('backup');
+                }}
+              >
+                {i18n.t('onboarding.importZeroOmega')}
+              </a>
               <span className={s.muted}>{i18n.t('onboarding.latencyLater')}</span>
               <div className={s.grow} />
               <Button variant="primary" className={s.bigBtn} disabled={chosen.length === 0} onClick={() => setStep(2)}>

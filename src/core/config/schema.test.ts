@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { defaultConfig } from './defaults';
 import { validateConfig } from './transfer';
-import type { Client, PersistedConfig } from './schema';
+import { CURRENT_CONFIG_VERSION, MAX_SITE_RULES, type Client, type PersistedConfig } from './schema';
 
 const flclash: Client = { id: 'c1', name: 'FlClash', host: '127.0.0.1', port: 7890, scheme: 'mixed', source: 'discovered' };
 const wanda: Client = { id: 'c2', name: '万达云', host: '127.0.0.1', port: 7892, scheme: 'mixed', source: 'discovered' };
@@ -105,7 +105,8 @@ describe('PersistedConfigSchema', () => {
   });
 
   it('版本号必须等于当前版本', () => {
-    expect(codes({ ...defaultConfig(), version: 2 })).toContainEqual(expect.stringMatching(/^version:/));
+    expect(codes({ ...defaultConfig(), version: CURRENT_CONFIG_VERSION + 1 })).toContainEqual(expect.stringMatching(/^version:/));
+    expect(codes({ ...defaultConfig(), version: CURRENT_CONFIG_VERSION - 1 })).toContainEqual(expect.stringMatching(/^version:/));
   });
 
   it('未知枚举值与缺字段都被拒绝', () => {
@@ -113,5 +114,24 @@ describe('PersistedConfigSchema', () => {
     expect(validateConfig({ ...cfg, settings: { ...cfg.settings, mode: 'pac' } }).ok).toBe(false);
     const { ruleSource: _r, ...noRules } = cfg;
     expect(validateConfig(noRules).ok).toBe(false);
+  });
+
+  it('我的网站：域名必须是规范化后的形式', () => {
+    const cfg = defaultConfig();
+    expect(codes({ ...cfg, siteRules: [{ domain: 'example.com', action: 'direct' }] })).toEqual([]);
+    for (const domain of ['Example.com', '*.example.com', 'http://example.com', 'localhost', '例子.cn'])
+      expect(codes({ ...cfg, siteRules: [{ domain, action: 'direct' }] })).toContain('siteRules.0.domain:invalid_domain');
+  });
+
+  it('我的网站：同一域名不能重复，动作只有直连 / 代理', () => {
+    const cfg = defaultConfig();
+    expect(codes({ ...cfg, siteRules: [{ domain: 'a.com', action: 'direct' }, { domain: 'a.com', action: 'proxy' }] })).toContain('siteRules.1.domain:duplicate_site_rule');
+    expect(validateConfig({ ...cfg, siteRules: [{ domain: 'a.com', action: 'client' }] }).ok).toBe(false);
+  });
+
+  it(`我的网站最多 ${MAX_SITE_RULES} 条`, () => {
+    const rules = Array.from({ length: MAX_SITE_RULES + 1 }, (_, i) => ({ domain: `s${i}.com`, action: 'direct' as const }));
+    expect(validateConfig({ ...defaultConfig(), siteRules: rules.slice(0, MAX_SITE_RULES) }).ok).toBe(true);
+    expect(validateConfig({ ...defaultConfig(), siteRules: rules }).ok).toBe(false);
   });
 });

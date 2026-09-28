@@ -6,6 +6,7 @@ import { requestOriginPermission, sendMessage } from '@/platform/view';
 import { Banner, BannerBody, Button, uiClass as ui } from '@/ui/components';
 import { formatDate, relativeTime, ruleErrorText, ruleSourceName } from '@/ui/format';
 import { saveOrReport } from './ClientsSection';
+import { SiteRules } from './SiteRules';
 import s from './Options.module.css';
 
 export function RulesSection({ view }: { view: ViewState }) {
@@ -77,7 +78,7 @@ export function RulesSection({ view }: { view: ViewState }) {
           title={i18n.t('options.rules.failedTitle', [formatDate(runtime.ruleUpdate.at), ruleErrorText(runtime.ruleUpdate.error)])}
           actions={
             <>
-              {src.kind === 'custom' && exitIsClient && (
+              {exitIsClient && (
                 <Button variant="warnOutline" disabled={busy} onClick={() => void update(true)}>
                   {i18n.t('options.rules.viaProxy')}
                 </Button>
@@ -137,7 +138,7 @@ export function RulesSection({ view }: { view: ViewState }) {
           <div className={s.stat}>
             <span className={s.statLabel}>{i18n.t('options.rules.current')}</span>
             <span className={s.statValue}>
-              {ruleSourceName(rules?.sourceUrl)} · {rules?.sourceUrl.startsWith('builtin:') ? i18n.t('options.rules.offlineCopy', [formatDate(rules.fetchedAt).slice(0, 10)]) : relativeTime(rules?.fetchedAt)}
+              {ruleSourceName(rules?.sourceUrl)} · {rules?.sourceUrl.startsWith('builtin:') ? i18n.t('options.rules.offlineCopy', [formatDate(rules.fetchedAt).slice(0, 10)]) : i18n.t('options.rules.updatedAt', [relativeTime(rules?.fetchedAt)])}
             </span>
           </div>
           <div className={s.stat}>
@@ -153,7 +154,6 @@ export function RulesSection({ view }: { view: ViewState }) {
               className={ui.select}
               style={{ width: 160 }}
               value={interval}
-              disabled={src.kind === 'builtin'}
               onChange={(e) => void saveOrReport(setRuleSource(config, { ...src, updateInterval: e.target.value as RuleSource['updateInterval'] }), setError)}
             >
               <option value="daily">{i18n.t('options.rules.daily')}</option>
@@ -163,8 +163,17 @@ export function RulesSection({ view }: { view: ViewState }) {
           </div>
         </div>
       </div>
-      {src.kind === 'builtin' && <div className={s.tip}>{i18n.t('options.rules.builtinTip')}</div>}
-      <div className={s.dashed}>{i18n.t('options.rules.v2Note')}</div>
+      {src.kind === 'builtin' && (
+        <div className={s.inline}>
+          <span className={s.tip} style={{ flexGrow: 1 }}>
+            {i18n.t('options.rules.builtinTip')}
+          </span>
+          <Button disabled={busy || runtime.ruleUpdate.status === 'updating'} onClick={() => void update(false)}>
+            {runtime.ruleUpdate.status === 'updating' ? i18n.t('options.rules.updating') : i18n.t('options.rules.updateNow')}
+          </Button>
+        </div>
+      )}
+      <SiteRules config={config} />
     </section>
   );
 }

@@ -8,6 +8,8 @@ import {
   setFallbackOptions,
   updateClient,
   validateConfig,
+  CURRENT_CONFIG_VERSION,
+  type ConfigIssue,
   type Client,
   type PersistedConfig,
   type ProxyScheme,
@@ -19,17 +21,23 @@ import { address, healthView, newClientId, schemeLabel } from '@/ui/format';
 import s from './Options.module.css';
 
 export async function saveOrReport(next: PersistedConfig, onError: (msg: string) => void): Promise<boolean> {
+  // 页面比后台新（扩展文件已更新但扩展未重新加载）：配置还是旧版本，保存必然失败，直接说明原因
+  if (next.version !== CURRENT_CONFIG_VERSION) {
+    onError(i18n.t('errors.staleExtension'));
+    return false;
+  }
   const local = validateConfig(next);
   if (!local.ok) {
-    onError(issueText(local.issues[0]?.code));
+    onError(issueText(local.issues[0]));
     return false;
   }
   const r: CommandResult = await sendMessage('saveConfig', next);
-  if (!r.ok) onError(issueText(r.issues?.[0]?.code ?? r.code));
+  if (!r.ok) onError(issueText(r.issues?.[0] ?? { path: [], code: r.code }));
   return r.ok;
 }
 
-function issueText(code: string | undefined): string {
+function issueText(issue: ConfigIssue | undefined): string {
+  const code = issue?.code;
   switch (code) {
     case 'duplicate_client_id':
       return i18n.t('errors.duplicateId');
@@ -38,8 +46,11 @@ function issueText(code: string | undefined): string {
       return i18n.t('errors.portRange');
     case 'invalid_format':
       return i18n.t('errors.hostFormat');
+    case 'invalid_domain':
+      return i18n.t('errors.invalidDomain');
     default:
-      return i18n.t('errors.invalid', [code ?? '']);
+      // 未单独翻译的错误：带上字段路径，便于定位
+      return i18n.t('errors.invalid', [[issue?.path.join('.'), code].filter(Boolean).join(' ')]);
   }
 }
 

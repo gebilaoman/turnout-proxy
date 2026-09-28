@@ -55,3 +55,20 @@ describe('migrateConfig', () => {
     expect(migrateConfig({ version })).toEqual({ ok: false, error: { code: 'bad_version', version } });
   });
 });
+
+describe('v1 → v2', () => {
+  it('补上空的 siteRules，结果是合法的当前版本配置', () => {
+    const { siteRules: _s, ...v1 } = { ...defaultConfig(), version: 1 };
+    const r = migrateConfig(v1);
+    expect(r.ok && r.from).toBe(1);
+    if (!r.ok) throw new Error('migrate failed');
+    expect(r.data.siteRules).toEqual([]);
+    expect(validateConfig(r.data).ok).toBe(true);
+  });
+
+  it('已有 siteRules（例如手工编辑过的文件）保留原样', () => {
+    const v1 = { ...defaultConfig(), version: 1, siteRules: [{ domain: 'a.com', action: 'direct' }] };
+    const r = migrateConfig(v1);
+    expect(r.ok && r.data.siteRules).toEqual([{ domain: 'a.com', action: 'direct' }]);
+  });
+});

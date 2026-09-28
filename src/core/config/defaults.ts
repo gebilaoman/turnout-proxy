@@ -15,5 +15,6 @@ export function defaultConfig(): PersistedConfig {
       autoSwitchBack: false,
     },
     ruleSource: { kind: 'builtin', updateInterval: 'daily' },
+    siteRules: [],
   };
 }

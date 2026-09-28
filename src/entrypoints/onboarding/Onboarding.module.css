@@ -35,3 +35,4 @@
 .summary > div { display: flex; gap: 16px; }
 .summary > div > span { width: 96px; flex-shrink: 0; }
 .pinTip { padding: 12px 16px; background: var(--accent-bg); border-radius: 10px; color: var(--accent-hover); line-height: 1.6; font-size: 13px; }
+.importLink { font-size: 13px; text-decoration: none; white-space: nowrap; }

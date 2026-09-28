@@ -111,6 +111,16 @@ export function Toggle({ id, checked, onChange, disabled }: { id: string; checke
   );
 }
 
+// 扩展文件已更新但扩展没有重新加载时（开发时加载未打包目录才会出现），页面与后台版本不一致
+export function StaleExtensionBanner({ configVersion, expected, text, title }: { configVersion: number; expected: number; text: string; title: string }) {
+  if (configVersion === expected) return null;
+  return (
+    <Banner tone="warn" icon="warn" title={title}>
+      <BannerBody>{text}</BannerBody>
+    </Banner>
+  );
+}
+
 export const uiClass = s;
 
 // 订阅一个外部数据源：subscribe 调用 cb 推送新值，返回取消函数

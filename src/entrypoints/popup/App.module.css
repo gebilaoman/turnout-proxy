@@ -51,6 +51,20 @@
 .ipBox { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--bg); border-radius: 8px; }
 .ipLabel { font-size: 11px; color: var(--text-2); }
 .ipValue { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+.ipValueMono { font-family: var(--font-mono); font-size: 13px; margin-top: 2px; }
+.smallIconBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.smallIconBtn:disabled { opacity: 0.5; }
 .grow { flex-grow: 1; }
 .note { font-size: 12px; color: var(--warn-strong); background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 8px; padding: 8px 10px; line-height: 1.5; }
 
@@ -117,3 +131,17 @@
 .footerRow { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .footerRow a { text-decoration: none; }
 .warnText { color: var(--warn); }
+
+.site { padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; gap: 8px; }
+.siteHead { display: flex; align-items: center; gap: 8px; }
+.siteDomain { flex-grow: 1; min-width: 0; font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.siteSelect { flex-grow: 1; min-width: 0; font-weight: 600; font-size: 13px; border: 0; background: transparent; padding: 0; color: var(--text); cursor: pointer; }
+.siteWhy { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+.siteWhy b { font-weight: 500; }
+.sitePick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.sitePick.single { grid-template-columns: 1fr; }
+.pick, .pickOn { height: 30px; border-radius: 7px; font-size: 12px; cursor: pointer; }
+.pick { border: 1px solid var(--border-input); background: var(--surface); color: var(--text); }
+.pickOn { border: 1px solid var(--accent); background: var(--accent-bg); color: var(--accent-hover); font-weight: 600; }
+.routeProxy { color: var(--accent); font-weight: 600; }
+.routeDirect { color: var(--text); font-weight: 600; }

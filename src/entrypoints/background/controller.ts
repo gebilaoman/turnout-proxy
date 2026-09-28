@@ -12,14 +12,16 @@ import {
   type RuntimeState,
 } from '@/core/config';
 import { CANDIDATE_PORTS, canaryHealthy, classifyPort, classifyProbe, decideExit, shouldRecheck } from '@/core/health';
-import { CANARY_KEY, planProxy, probeKey } from '@/core/pac';
+import { CANARY_KEY, explainRoute, planProxy, probeKey, type RouteExplanation } from '@/core/pac';
+import { isBuiltinSource } from '@/core/rules';
 import { iconState } from '@/core/state';
 import { scheduleAlarms } from '@/platform/alarms';
 import { setToolbarIcon } from '@/platform/icon';
 import type { CommandResult, ScanHit, ViewState } from '@/platform/messages';
 import { checkPort, probeVia, PROBE_TIMEOUT_MS } from '@/platform/probe';
 import { applyPlan, readControl } from '@/platform/proxy';
-import { BUILTIN_SOURCE, builtinRuleCache, fetchRuleCache } from '@/platform/rules';
+import { fetchExitIp } from '@/platform/exitip';
+import { BUILTIN_ONLINE_URL, builtinRuleCache, fetchRuleCache } from '@/platform/rules';
 import {
   backupConfig,
   configItem,
@@ -80,12 +82,17 @@ function pacActive(config: PersistedConfig, control: RuntimeState['control']): b
 // 网络探测在串行队列之外进行（最长约 10 秒），只有写入结果与重新应用代理的一步进入队列，
 // 这样检测不会拖慢界面上的保存、切换等操作。
 export async function runHealth(scope: 'active' | 'all'): Promise<void> {
+  if (await measureAndCommit(scope)) void refreshExitIp();
+}
+
+// 返回实际出口是否发生了变化
+async function measureAndCommit(scope: 'active' | 'all'): Promise<boolean> {
   const config = await getConfig();
   const runtime = await getRuntime();
   const { exit, backupClientId } = config.settings;
   const activeIds = new Set([exit.kind === 'client' ? exit.clientId : null, backupClientId].filter((x): x is string => !!x));
   const targets = scope === 'all' ? config.clients : config.clients.filter((c) => activeIds.has(c.id));
-  if (targets.length === 0) return;
+  if (targets.length === 0) return false;
 
   const portStates = await Promise.all(
     targets.map(async (c): Promise<PortState> => {
@@ -114,7 +121,7 @@ export async function runHealth(scope: 'active' | 'all'): Promise<void> {
   }
   const now = new Date().toISOString();
 
-  await serial(async () => {
+  return serial(async () => {
     // 探测期间配置可能已被修改：重新读取，只采纳地址与协议没变的客户端的结果
     const latest = await getConfig();
     const current = await getRuntime();
@@ -142,6 +149,7 @@ export async function runHealth(scope: 'active' | 'all'): Promise<void> {
       pacEpoch: r.pacEpoch + (decision.bumpEpoch ? 1 : 0),
     }));
     await reconcile();
+    return JSON.stringify(decision.effectiveExit) !== JSON.stringify(current.effectiveExit);
   });
 }
 
@@ -155,6 +163,11 @@ export async function onProxyErrorRecheck(): Promise<void> {
     return true;
   });
   if (go) await runHealth('active');
+}
+
+export async function explain(url: string): Promise<RouteExplanation> {
+  const [config, cache] = await Promise.all([getConfig(), ruleCacheItem.getValue()]);
+  return explainRoute(url, config, cache?.compiled ?? null);
 }
 
 export async function getView(): Promise<ViewState> {
@@ -184,8 +197,9 @@ export async function saveConfig(next: PersistedConfig): Promise<CommandResult> 
   const sourceChanged = JSON.stringify(prev.ruleSource) !== JSON.stringify(valid.config.ruleSource);
   await reconcile();
   if (sourceChanged) await refreshRules(false);
-  // 检测异步进行，不阻塞界面（结果写入时自行进入串行队列）
+  // 检测与出口 IP 查询异步进行，不阻塞界面（结果写入时自行进入串行队列）
   void runHealth('all');
+  void refreshExitIp();
   return { ok: true };
 }
 
@@ -195,6 +209,7 @@ export async function switchBack(): Promise<CommandResult> {
   const primary = config.settings.exit.clientId;
   await updateRuntime((r) => ({ ...r, effectiveExit: { kind: 'client', clientId: primary }, alert: 'none', alertDismissed: false, pacEpoch: r.pacEpoch + 1 }));
   await reconcile();
+  void refreshExitIp();
   return { ok: true };
 }
 
@@ -202,17 +217,11 @@ export async function dismissAlert(): Promise<void> {
   await updateRuntime((r) => ({ ...r, alertDismissed: true }));
 }
 
-// 规则更新：失败时保留旧规则，把原因写入状态（CLAUDE.md「网络请求」）
+// 规则更新：失败时保留旧规则，把原因写入状态（CLAUDE.md「网络请求」）。
+// 内置来源从 GFWList 官方地址在线更新，扩展包内的离线副本只在没有任何缓存时使用。
 export async function refreshRules(viaProxy: boolean): Promise<CommandResult> {
   const config = await getConfig();
-  if (config.ruleSource.kind === 'builtin') {
-    const current = await ruleCacheItem.getValue();
-    if (current?.sourceUrl !== BUILTIN_SOURCE) await ruleCacheItem.setValue(await builtinRuleCache());
-    await updateRuntime((r) => ({ ...r, ruleUpdate: { status: 'ok', at: new Date().toISOString() } }));
-    await reconcile();
-    return { ok: true };
-  }
-  const url = config.ruleSource.url;
+  const url = config.ruleSource.kind === 'custom' ? config.ruleSource.url : BUILTIN_ONLINE_URL;
   await updateRuntime((r) => ({ ...r, ruleUpdate: { ...r.ruleUpdate, status: 'updating' } }));
   // 「通过当前客户端更新」：临时把订阅域名加入 MATCH，更新完成后恢复
   if (viaProxy) await reconcile([new URL(url).hostname]);
@@ -224,9 +233,32 @@ export async function refreshRules(viaProxy: boolean): Promise<CommandResult> {
   } else {
     const e = result.error;
     await updateRuntime((r) => ({ ...r, ruleUpdate: { status: 'failed', at, error: e.code === 'http_status' ? `http_status:${e.status}` : e.code } }));
+    // 切换到内置来源但在线更新失败时，至少换回内置离线副本，不继续用旧的自定义订阅
+    const cache = await ruleCacheItem.getValue();
+    if (config.ruleSource.kind === 'builtin' && cache && !isBuiltinSource(cache.sourceUrl)) {
+      await ruleCacheItem.setValue(await builtinRuleCache());
+    }
   }
   await reconcile();
   return result.ok ? { ok: true } : { ok: false, code: result.error.code };
+}
+
+// 出口 IP：查询经 PAC 固定走当前出口。via 标记查询时的出口，出口变化后旧结果作废
+function currentVia(config: PersistedConfig, runtime: RuntimeState): string {
+  if (config.settings.mode === 'direct') return 'direct';
+  if (config.settings.exit.kind === 'system') return 'system';
+  return runtime.effectiveExit?.kind === 'client' ? runtime.effectiveExit.clientId : config.settings.exit.clientId;
+}
+
+export async function refreshExitIp(): Promise<void> {
+  const via = currentVia(await getConfig(), await getRuntime());
+  const r = await fetchExitIp();
+  const checkedAt = new Date().toISOString();
+  await serial(async () => {
+    // 查询期间出口变了，结果不可信，丢弃
+    if (currentVia(await getConfig(), await getRuntime()) !== via) return;
+    await updateRuntime((rt) => ({ ...rt, exitIp: r.ok ? { ...r.value, checkedAt, via } : { error: r.error, checkedAt, via } }));
+  });
 }
 
 // 自动发现：对候选端口做第 1 级检测（ARCHITECTURE §5）
@@ -267,8 +299,26 @@ export async function restoreBackup(index: number): Promise<CommandResult> {
   return r.ok ? { ok: true } : { ok: false, code: r.error.code };
 }
 
+// 先把当前配置写入备份槽再保存（从其他扩展导入时使用，可在「备份与导入」里撤销）
+export async function saveConfigWithBackup(next: PersistedConfig): Promise<CommandResult> {
+  await backupConfig(await getConfig());
+  return saveConfig(next);
+}
+
 export async function finishOnboarding(config: PersistedConfig): Promise<CommandResult> {
   const r = await saveConfig(config);
-  if (r.ok) await onboardedItem.setValue(true);
+  if (r.ok) {
+    await onboardedItem.setValue(true);
+    // 引导完成后 PAC 已生效，内置规则此时可经客户端在线更新（排在队列里，不阻塞返回）
+    void serial(() => refreshIfOfflineCopy());
+  }
   return r;
+}
+
+// 仍在使用扩展自带的离线副本时尝试在线更新一次（内置来源且开启了自动更新）
+export async function refreshIfOfflineCopy(): Promise<void> {
+  const [config, cache] = await Promise.all([getConfig(), ruleCacheItem.getValue()]);
+  if (config.ruleSource.kind !== 'builtin' || config.ruleSource.updateInterval === 'off') return;
+  if (cache && !cache.sourceUrl.startsWith('builtin:')) return;
+  await refreshRules(false);
 }

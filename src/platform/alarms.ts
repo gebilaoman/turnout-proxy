@@ -12,8 +12,8 @@ export async function scheduleAlarms(hasClients: boolean, ruleSource: RuleSource
   if (hasClients && !health) await browser.alarms.create(HEALTH_ALARM, { periodInMinutes: 1, delayInMinutes: 1 });
   if (!hasClients && health) await browser.alarms.clear(HEALTH_ALARM);
 
-  // 内置规则只有离线副本，不定时更新；自定义订阅按设置的间隔
-  const period = ruleSource.kind === 'custom' && ruleSource.updateInterval !== 'off' ? RULE_PERIOD_MIN[ruleSource.updateInterval] : null;
+  // 内置与自定义订阅都按设置的间隔在线更新
+  const period = ruleSource.updateInterval !== 'off' ? RULE_PERIOD_MIN[ruleSource.updateInterval] : null;
   const rules = await browser.alarms.get(RULES_ALARM);
   if (period === null) {
     if (rules) await browser.alarms.clear(RULES_ALARM);

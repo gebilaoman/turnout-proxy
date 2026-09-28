@@ -1,11 +1,12 @@
 // 弹窗（docs/design/project/Main、PopupOffline、PopupConflict、PopupAllDown）
 import { useCallback, useEffect, useState } from 'react';
 import { i18n } from '#i18n';
-import { setExit, setMode, type Client, type Exit, type Mode, type PersistedConfig } from '@/core/config';
+import { CURRENT_CONFIG_VERSION, setExit, setMode, type Client, type Exit, type Mode, type PersistedConfig } from '@/core/config';
 import type { ViewState } from '@/platform/messages';
 import { openExtensionsPage, openOnboarding, openOptions, sendMessage, subscribeView } from '@/platform/view';
-import { Banner, BannerBody, Button, Dot, Logo, Steps, useSubscription } from '@/ui/components';
-import { address, healthView, offlineReason, relativeTime, ruleErrorText, ruleSourceName, schemeShort } from '@/ui/format';
+import { Banner, BannerBody, Button, Dot, Logo, StaleExtensionBanner, Steps, useSubscription } from '@/ui/components';
+import { address, countryName, healthView, offlineReason, relativeTime, ruleErrorText, ruleSourceName, schemeShort } from '@/ui/format';
+import { CurrentSite } from './CurrentSite';
 import s from './App.module.css';
 
 const MODES: Mode[] = ['smart', 'all', 'direct'];
@@ -17,6 +18,7 @@ export function App() {
   // 弹窗打开时立即检测所有客户端（ARCHITECTURE §5）
   useEffect(() => {
     void sendMessage('recheck', 'all');
+    void sendMessage('refreshExitIp', undefined);
   }, []);
 
   if (!view) return <div className={s.popup} />;
@@ -54,6 +56,7 @@ export function App() {
       </header>
 
       <div className={s.body}>
+        <StaleExtensionBanner configVersion={config.version} expected={CURRENT_CONFIG_VERSION} title={i18n.t('errors.staleTitle')} text={i18n.t('errors.staleExtension')} />
         {blocked && (
           <Banner
             tone="error"
@@ -153,6 +156,8 @@ export function App() {
         )}
 
         {!blocked && alert !== 'all_down' && config.clients.length > 0 && <StatusCard view={view} effective={effective} />}
+
+        {!blocked && config.clients.length > 0 && <CurrentSite config={config} onSave={save} busy={busy} />}
 
         {!runtime.probeOk && !direct && <div className={s.note}>{i18n.t('popup.probeBroken')}</div>}
 
@@ -259,12 +264,48 @@ function StatusCard({ view, effective }: { view: ViewState; effective: Client | 
         <div className={s.cardTitle}>{title}</div>
         <div className={s.mono}>{!direct && !system && h?.online ? h.detail : ''}</div>
       </div>
-      <div className={s.ipBox}>
-        <div className={s.grow}>
-          <div className={s.ipLabel}>{i18n.t('popup.exitIp')}</div>
-          <div className={s.ipValue}>{i18n.t('popup.exitIpPending')}</div>
-        </div>
+      <ExitIpBox view={view} />
+    </div>
+  );
+}
+
+// 出口 IP：只显示与当前出口一致的查询结果（换出口后旧结果作废，等待重新查询）
+function ExitIpBox({ view }: { view: ViewState }) {
+  const { config, runtime } = view;
+  const [loading, setLoading] = useState(false);
+  const via =
+    config.settings.mode === 'direct'
+      ? 'direct'
+      : config.settings.exit.kind === 'system'
+        ? 'system'
+        : runtime.effectiveExit?.kind === 'client'
+          ? runtime.effectiveExit.clientId
+          : config.settings.exit.clientId;
+  const info = runtime.exitIp?.via === via ? runtime.exitIp : undefined;
+  const refresh = async () => {
+    setLoading(true);
+    try {
+      await sendMessage('refreshExitIp', undefined);
+    } finally {
+      setLoading(false);
+    }
+  };
+  let value: string;
+  if (loading || !info) value = i18n.t('popup.exitIpLoading');
+  else if ('ip' in info) value = info.country ? `${info.ip} · ${countryName(info.country)}` : info.ip;
+  else value = i18n.t('popup.exitIpFailed');
+  return (
+    <div className={s.ipBox}>
+      <div className={s.grow}>
+        <div className={s.ipLabel}>{via === 'direct' ? i18n.t('popup.exitIpDirect') : i18n.t('popup.exitIp')}</div>
+        <div className={info && 'ip' in info && !loading ? s.ipValueMono : s.ipValue}>{value}</div>
       </div>
+      <button type="button" className={s.smallIconBtn} aria-label={i18n.t('popup.exitIpRefresh')} disabled={loading} onClick={() => void refresh()}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M21 12a9 9 0 1 1-2.6-6.4" />
+          <path d="M21 3v6h-6" />
+        </svg>
+      </button>
     </div>
   );
 }

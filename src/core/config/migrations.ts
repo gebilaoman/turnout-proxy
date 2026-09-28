@@ -7,8 +7,10 @@ import { CURRENT_CONFIG_VERSION } from './schema';
 export type Migration = (old: Record<string, unknown>) => Record<string, unknown>;
 export type MigrationTable = Readonly<Record<number, Migration>>;
 
-// v1 是首个版本，暂无迁移。
-export const CONFIG_MIGRATIONS: MigrationTable = {};
+export const CONFIG_MIGRATIONS: MigrationTable = {
+  // v2：新增「我的网站」列表
+  2: (old) => ({ ...old, siteRules: Array.isArray(old.siteRules) ? old.siteRules : [] }),
+};
 
 export type MigrateError =
   | { code: 'not_object' }

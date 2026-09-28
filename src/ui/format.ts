@@ -1,6 +1,7 @@
 // 界面显示用的格式化：把状态翻译成文案与颜色。文案来自 i18n，不在这里硬编码。
 import { i18n } from '#i18n';
 import type { Client, ClientHealth, PortState, ProxyScheme } from '@/core/config';
+import { isBuiltinSource } from '@/core/rules';
 
 export function schemeLabel(s: ProxyScheme): string {
   return s === 'mixed' ? i18n.t('scheme.mixed') : s === 'http' ? i18n.t('scheme.http') : i18n.t('scheme.socks5');
@@ -58,7 +59,7 @@ export function formatDate(iso: string | undefined): string {
 
 export function ruleSourceName(sourceUrl: string | undefined): string {
   if (!sourceUrl) return i18n.t('rules.none');
-  if (sourceUrl.startsWith('builtin:')) return i18n.t('rules.builtinName');
+  if (isBuiltinSource(sourceUrl)) return i18n.t('rules.builtinName');
   try {
     return new URL(sourceUrl).hostname;
   } catch {
@@ -91,4 +92,15 @@ export function ruleErrorText(code: string | undefined): string {
 
 export function newClientId(): string {
   return crypto.randomUUID().replace(/-/g, '').slice(0, 16);
+}
+
+// 国家代码 → 当前界面语言的国家名（如 JP → 日本）
+export function countryName(code: string | undefined): string {
+  if (!code) return '';
+  try {
+    // 与界面文案同一语言（页面 lang 由 i18n 决定，目前为 zh-CN），而不是浏览器语言
+    return new Intl.DisplayNames([document.documentElement.lang || 'zh-CN'], { type: 'region' }).of(code) ?? code;
+  } catch {
+    return code;
+  }
 }

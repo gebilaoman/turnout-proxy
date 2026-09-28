@@ -47,7 +47,7 @@ src/
 ## 硬性规则（每条都来自竞品踩过的坑）
 
 **权限与商店合规**
-- 只申请 `proxy`、`storage`、`alarms` 三个权限；`host_permissions` 只写 `http://127.0.0.1/*`、`http://localhost/*`、探测域名 `http://connectivitycheck.gstatic.com/*`（M0 确认）、默认规则源和出口 IP 服务的域名。
+- 只申请 `proxy`、`storage`、`alarms`、`activeTab`（第二版确认，仅用于弹窗读取当前网站）四个权限；`host_permissions` 只写 `http://127.0.0.1/*`、`http://localhost/*`、探测域名 `http://connectivitycheck.gstatic.com/*`（M0 确认）、默认规则源 `https://raw.githubusercontent.com/*` 和出口 IP 服务 `https://one.one.one.one/*`（第二版确认）。
 - 禁止 `<all_urls>`、`tabs`、`webRequest`、`history`、`cookies`。用户自定义订阅地址用 `optional_host_permissions` 运行时申请。
 - 禁止远程代码：不得 `eval`、`new Function`、加载远程脚本或远程 PAC。订阅规则只当数据解析。
 - 修改 `wxt.config.ts` 中的 manifest 权限必须先停下来确认。

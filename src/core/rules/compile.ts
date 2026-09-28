@@ -1,6 +1,9 @@
 // AutoProxy / GFWList 规则订阅的解析与编译（ARCHITECTURE §4）。
 // 输出按域名后缀查找的表，供 core/pac 生成哈希表 PAC；不生成任何可执行代码。
+import { normalizeDomain } from '../domain';
 import { err, ok, type Result } from '../result';
+
+export { normalizeDomain };
 
 export const MAX_REGEX_RULES = 200;
 
@@ -22,7 +25,6 @@ export interface CompiledRules {
 export type RuleParseError = { code: 'not_autoproxy' } | { code: 'decode_failed' } | { code: 'no_rules' };
 
 const HEADER_RE = /^\s*\[AutoProxy[^\]]*\]/i;
-const LABEL_RE = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
 
 // 明文直接返回；否则按 base64 解码（GFWList 官方发布为 base64）。
 export function decodeRuleText(text: string): Result<string, RuleParseError> {
@@ -39,24 +41,6 @@ export function decodeRuleText(text: string): Result<string, RuleParseError> {
   }
   decoded = decoded.replace(/^\uFEFF/, '').trim();
   return HEADER_RE.test(decoded) ? ok(decoded) : err({ code: 'not_autoproxy' });
-}
-
-// 规范化域名：小写、国际化域名转 punycode（Chrome 传给 PAC 的 host 是 punycode）、去掉末尾点。
-// 不合法返回 null。
-export function normalizeDomain(raw: string): string | null {
-  let d = raw.trim().toLowerCase().replace(/\.$/, '');
-  if (!d || d.includes('*')) return null;
-  if (/[^\x21-\x7e]/.test(d)) {
-    try {
-      d = new URL(`http://${d}/`).hostname;
-    } catch {
-      return null;
-    }
-  }
-  if (d.length > 253) return null;
-  const labels = d.split('.');
-  if (labels.length < 2) return null;
-  return labels.every((l) => LABEL_RE.test(l)) ? d : null;
 }
 
 // 从一条去掉 @@ 前缀后的规则中提取域名；不是域名类规则返回 null。

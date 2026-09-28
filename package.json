@@ -2,7 +2,7 @@
   "name": "turnout-proxy",
   "description": "Turnout – Proxy Switcher：多本地代理客户端的 Chrome 代理切换扩展",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -17,7 +17,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "check": "pnpm typecheck && pnpm lint && pnpm test",
-    "e2e": "wxt build && node e2e/smoke.mjs && node e2e/failover.mjs"
+    "e2e": "wxt build && node e2e/smoke.mjs && node e2e/failover.mjs && node e2e/v2.mjs"
   },
   "dependencies": {
     "@webext-core/messaging": "^4.0.0",

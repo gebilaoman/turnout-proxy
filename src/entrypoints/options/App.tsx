@@ -3,7 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { i18n } from '#i18n';
 import type { ViewState } from '@/platform/messages';
 import { subscribeView } from '@/platform/view';
-import { Logo, useSubscription } from '@/ui/components';
+import { CURRENT_CONFIG_VERSION } from '@/core/config';
+import { Logo, StaleExtensionBanner, useSubscription } from '@/ui/components';
 import { BackupSection } from './BackupSection';
 import { ClientsSection } from './ClientsSection';
 import { RulesSection } from './RulesSection';
@@ -53,6 +54,9 @@ export function App() {
         </div>
       </nav>
       <main className={s.main}>
+        {view && (
+          <StaleExtensionBanner configVersion={view.config.version} expected={CURRENT_CONFIG_VERSION} title={i18n.t('errors.staleTitle')} text={i18n.t('errors.staleExtension')} />
+        )}
         {!view ? null : section === 'clients' ? (
           <ClientsSection view={view} />
         ) : section === 'rules' ? (

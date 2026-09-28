@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`generatePac · 稳定性 > 快照 1`] = `
-"// Turnout 1.0.0 88977027 epoch=0
+"// Turnout 1.0.0 0e5e2325 epoch=0
 var PROBES = {
 "canary":"PROXY 127.0.0.1:9",
 "h7890":"PROXY 127.0.0.1:7890",
@@ -15,6 +15,15 @@ function probe(url, host) {
 }
 function isLocal(host) {
   return isPlainHostName(host) || host === "127.0.0.1" || host === "localhost" || host === "[::1]" || host === "::1";
+}
+var SITE = {};
+function site(h) {
+  for (;;) {
+    if (Object.prototype.hasOwnProperty.call(SITE, h)) return SITE[h];
+    var i = h.indexOf(".");
+    if (i < 0) return "";
+    h = h.substring(i + 1);
+  }
 }
 var ROUTE = "PROXY 127.0.0.1:7890; PROXY 127.0.0.1:7892";
 var EXCEPT = {
@@ -37,8 +46,12 @@ function hit(t, h) {
 function FindProxyForURL(url, host) {
   var p = probe(url, host);
   if (p) return p;
+  if (host === "one.one.one.one") return ROUTE;
   if (isLocal(host)) return "DIRECT";
   host = host.toLowerCase();
+  var s = site(host);
+  if (s === "D") return "DIRECT";
+  if (s === "P") return ROUTE;
   if (hit(EXCEPT, host)) return "DIRECT";
   if (hit(MATCH, host)) return ROUTE;
   for (var i = 0; i < REGEX.length; i++) if (REGEX[i].test(url)) return ROUTE;

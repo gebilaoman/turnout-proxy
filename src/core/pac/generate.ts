@@ -1,6 +1,6 @@
 // PAC 生成（ARCHITECTURE §3）。纯函数：输入相同则输出字节级相同；输出只含 ASCII。
 // 只输出数据表和一个很小的查找函数，规则内容一律作为字符串数据写入，不拼接成代码。
-import type { Client, ProxyScheme } from '../config';
+import type { Client, ProxyScheme, SiteRule } from '../config';
 import type { CompiledRules } from '../rules';
 
 export const PROBE_HOST = 'connectivitycheck.gstatic.com';
@@ -8,6 +8,9 @@ export const PROBE_PARAM = 'turnout_probe';
 export const CANARY_KEY = 'canary';
 // 金丝雀：端口 9（discard）按约定没有服务监听，经它的探测必须失败
 export const CANARY_PROXY = 'PROXY 127.0.0.1:9';
+// 出口 IP 查询（Cloudflare trace）。PAC 固定把这个主机名交给当前出口，显示的就是经客户端出去的 IP
+export const EXIT_IP_HOST = 'one.one.one.one';
+export const EXIT_IP_URL = `https://${EXIT_IP_HOST}/cdn-cgi/trace`;
 
 export function proxyToken(c: Pick<Client, 'host' | 'port' | 'scheme'>): string {
   const host = c.host.includes(':') && !c.host.startsWith('[') ? `[${c.host}]` : c.host;
@@ -30,6 +33,7 @@ export type PacRouting =
 export interface PacInput {
   routing: PacRouting;
   probes: Readonly<Record<string, string>>; // 探测键 → 单一代理串
+  siteRules?: readonly SiteRule[]; // 「我的网站」，优先于规则订阅；全部代理模式下只有「直连」条目生效
   epoch: number;
   version: string; // 扩展版本，写进首行注释
 }
@@ -62,6 +66,11 @@ export function fnv1a(s: string): string {
 
 export function generatePac(input: PacInput): string {
   const { routing, probes, epoch, version } = input;
+  const siteEntries = [...(input.siteRules ?? [])]
+    .filter((r) => routing.kind === 'smart' || r.action === 'direct')
+    .sort((a, b) => (a.domain < b.domain ? -1 : a.domain > b.domain ? 1 : 0))
+    .map((r) => `${lit(r.domain)}:${lit(r.action === 'direct' ? 'D' : 'P')}`);
+  const siteTable = siteEntries.length === 0 ? '{}' : `{\n${siteEntries.join(',\n')}\n}`;
   const route = routing.route.join('; ');
   const probeTable = `{\n${sortedEntries({ ...probes, [CANARY_KEY]: CANARY_PROXY })
     .map(([k, v]) => `${lit(k)}:${lit(v)}`)
@@ -73,7 +82,9 @@ export function generatePac(input: PacInput): string {
 function FindProxyForURL(url, host) {
   var p = probe(url, host);
   if (p) return p;
+  if (host === ${lit(EXIT_IP_HOST)}) return ROUTE;
   if (isLocal(host)) return "DIRECT";
+  if (site(host.toLowerCase()) === "D") return "DIRECT";
   return ROUTE;
 }`;
   } else {
@@ -93,8 +104,12 @@ function hit(t, h) {
 function FindProxyForURL(url, host) {
   var p = probe(url, host);
   if (p) return p;
+  if (host === ${lit(EXIT_IP_HOST)}) return ROUTE;
   if (isLocal(host)) return "DIRECT";
   host = host.toLowerCase();
+  var s = site(host);
+  if (s === "D") return "DIRECT";
+  if (s === "P") return ROUTE;
   if (hit(EXCEPT, host)) return "DIRECT";
   if (hit(MATCH, host)) return ROUTE;
   for (var i = 0; i < REGEX.length; i++) if (REGEX[i].test(url)) return ROUTE;
@@ -111,6 +126,15 @@ function probe(url, host) {
 }
 function isLocal(host) {
   return isPlainHostName(host) || host === "127.0.0.1" || host === "localhost" || host === "[::1]" || host === "::1";
+}
+var SITE = ${siteTable};
+function site(h) {
+  for (;;) {
+    if (Object.prototype.hasOwnProperty.call(SITE, h)) return SITE[h];
+    var i = h.indexOf(".");
+    if (i < 0) return "";
+    h = h.substring(i + 1);
+  }
 }`;
 
   const content = `${common}\n${body}\n`;

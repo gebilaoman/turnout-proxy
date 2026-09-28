@@ -1,6 +1,6 @@
 // 对配置的常用修改。纯函数：返回新对象，不修改入参；结果可能仍需 validateConfig 校验。
 // 放在 core 里，界面（组装新配置）和后台（校验后保存）共用同一套规则。
-import type { Client, Exit, Mode, PersistedConfig, RuleSource } from './schema';
+import type { Client, Exit, Mode, PersistedConfig, RuleSource, SiteAction } from './schema';
 
 const clone = (c: PersistedConfig): PersistedConfig => structuredClone(c);
 
@@ -72,4 +72,17 @@ export function setRuleSource(cfg: PersistedConfig, ruleSource: RuleSource): Per
 export function findByAddress(cfg: PersistedConfig, host: string, port: number): Client | undefined {
   const h = host.toLowerCase();
   return cfg.clients.find((c) => c.host.toLowerCase() === h && c.port === port);
+}
+
+// 「我的网站」：同一域名只保留一条，再次设置即覆盖；新条目放在最前
+export function setSiteRule(cfg: PersistedConfig, domain: string, action: SiteAction): PersistedConfig {
+  const next = clone(cfg);
+  next.siteRules = [{ domain, action }, ...next.siteRules.filter((r) => r.domain !== domain)];
+  return next;
+}
+
+export function removeSiteRule(cfg: PersistedConfig, domain: string): PersistedConfig {
+  const next = clone(cfg);
+  next.siteRules = next.siteRules.filter((r) => r.domain !== domain);
+  return next;
 }

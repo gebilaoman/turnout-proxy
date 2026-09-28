@@ -47,9 +47,9 @@ export function planProxy(input: PlanInput): { ok: true; plan: ProxyPlan } | { o
   const route = routeFor(config, eff);
   const probes = probeTable(config.clients);
   if (mode === 'all') {
-    return { ok: true, plan: { mode: 'pac_script', data: generatePac({ routing: { kind: 'all', route }, probes, epoch: runtime.pacEpoch, version }) } };
+    return { ok: true, plan: { mode: 'pac_script', data: generatePac({ routing: { kind: 'all', route }, probes, siteRules: config.siteRules, epoch: runtime.pacEpoch, version }) } };
   }
   if (!rules) return { ok: false, error: { code: 'no_rules' } };
   const routing = input.extraMatch ? { kind: 'smart' as const, route, rules, extraMatch: input.extraMatch } : { kind: 'smart' as const, route, rules };
-  return { ok: true, plan: { mode: 'pac_script', data: generatePac({ routing, probes, epoch: runtime.pacEpoch, version }) } };
+  return { ok: true, plan: { mode: 'pac_script', data: generatePac({ routing, probes, siteRules: config.siteRules, epoch: runtime.pacEpoch, version }) } };
 }

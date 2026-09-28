@@ -2,7 +2,7 @@
 import { browser } from '#imports';
 import { i18n } from '#i18n';
 import { sendMessage, type ViewState } from './messages';
-import { originPattern } from './rules';
+import { hasOriginPermission, originPattern } from './rules';
 import { configItem, onboardedItem, ruleCacheItem, runtimeItem } from './storage';
 
 export function subscribeView(cb: (v: ViewState) => void): () => void {
@@ -45,6 +45,12 @@ export function openExtensionsPage(): void {
   void browser.tabs.create({ url: 'chrome://extensions' });
 }
 
+// 当前标签页网址。依赖 activeTab：只有用户点开弹窗时才能读到
+export async function getActiveTabUrl(): Promise<string | null> {
+  const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+  return tab?.url ?? null;
+}
+
 export function extensionVersion(): string {
   return browser.runtime.getManifest().version;
 }
@@ -63,4 +69,4 @@ export function ensureI18nLoaded(): boolean {
   return false;
 }
 
-export { sendMessage };
+export { hasOriginPermission, sendMessage };

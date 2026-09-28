@@ -4,7 +4,9 @@ import builtinText from '@/assets/rules/gfwlist.txt?raw';
 import { err, ok, type Result } from '@/core/result';
 import { parseRuleList, type RuleCache, type RuleParseError } from '@/core/rules';
 
-export const BUILTIN_SOURCE = 'builtin:gfwlist-2026-09-28';
+import { BUILTIN_SOURCE } from '@/core/rules';
+
+export { BUILTIN_ONLINE_URL, BUILTIN_SOURCE } from '@/core/rules';
 const FETCH_TIMEOUT_MS = 20_000;
 const MAX_BYTES = 8 * 1024 * 1024;
 

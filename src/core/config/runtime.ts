@@ -21,7 +21,8 @@ export interface RuntimeState {
   alertDismissed: boolean; // 用户在弹窗点了「知道了」；提示类型变化时重置
   probeOk: boolean; // 金丝雀校验是否通过（ARCHITECTURE §5）
   lastCheckAt?: string;
-  exitIp?: { ip: string; region?: string; checkedAt: string };
+  // 出口 IP（Cloudflare trace）。via 为查询时的出口：客户端 id、'direct' 或 'system'；换出口后作废
+  exitIp?: { ip: string; country?: string; checkedAt: string; via: string } | { error: string; checkedAt: string; via: string };
   control: 'ok' | 'other_extension' | 'policy';
   pacEpoch: number; // ARCHITECTURE §3：恢复主代理时递增，迫使 Chrome 清除坏代理标记
   ruleUpdate: { status: 'ok' | 'failed' | 'updating'; error?: string; at?: string };

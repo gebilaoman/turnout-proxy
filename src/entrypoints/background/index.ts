@@ -3,15 +3,19 @@ import { HEALTH_ALARM, RULES_ALARM } from '@/platform/alarms';
 import { onMessage } from '@/platform/messages';
 import {
   dismissAlert,
+  explain,
   finishOnboarding,
   getView,
   importConfig,
   onProxyErrorRecheck,
   reconcile,
+  refreshIfOfflineCopy,
+  refreshExitIp,
   refreshRules,
   restoreBackup,
   runHealth,
   saveConfig,
+  saveConfigWithBackup,
   scan,
   serial,
   switchBack,
@@ -27,7 +31,9 @@ export default defineBackground(() => {
     });
   });
   browser.runtime.onStartup.addListener(() => {
-    void serial(() => reconcile()).then(() => runHealth('active'));
+    void serial(() => reconcile())
+      .then(() => runHealth('active'))
+      .then(() => serial(() => refreshIfOfflineCopy()));
   });
   browser.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === HEALTH_ALARM) void runHealth('active');
@@ -41,7 +47,10 @@ export default defineBackground(() => {
   });
 
   onMessage('getView', () => getView());
+  onMessage('explain', ({ data }) => explain(data));
   onMessage('saveConfig', ({ data }) => serial(() => saveConfig(data)));
+  onMessage('saveConfigWithBackup', ({ data }) => serial(() => saveConfigWithBackup(data)));
+  onMessage('refreshExitIp', () => refreshExitIp());
   onMessage('switchBack', () => serial(() => switchBack()));
   onMessage('dismissAlert', () => serial(() => dismissAlert()));
   onMessage('recheck', ({ data }) => runHealth(data));

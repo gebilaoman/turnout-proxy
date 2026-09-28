@@ -1,8 +1,9 @@
 # Turnout 架构设计
 
-版本 0.2（2026-09-28）。本文件是实现的依据；实现与本文不一致时，以修改本文并经人确认为准。
+版本 0.4（2026-09-28）。本文件是实现的依据；实现与本文不一致时，以修改本文并经人确认为准。
 
-变更记录：0.3（2026-09-28）首个可用版本实现后的对齐——RuntimeState 增加字段、跟随系统改用 clear、探测键格式与重试、检测不阻塞串行队列、内置规则仅离线副本（详见各节「实现说明」）。
+变更记录：0.4（2026-09-28，第二版）新增「我的网站」（§4.1，配置 v2）、出口 IP（Cloudflare trace）、内置规则在线更新、ZeroOmega 导入；权限增加 activeTab 与两个域名（§8）。
+0.3（2026-09-28）首个可用版本实现后的对齐——RuntimeState 增加字段、跟随系统改用 clear、探测键格式与重试、检测不阻塞串行队列、内置规则仅离线副本（详见各节「实现说明」）。
 0.2 根据 M0 技术验证修订——新增探测域名权限、PAC epoch、金丝雀校验、第 1 级检测超时语义、onProxyError 节流；取消 LNA 检测与引导；候选端口加 1086。
 
 ## 1. 总览
@@ -60,11 +61,17 @@ interface Settings {
   autoSwitchBack: boolean;           // 默认 false
 }
 
-interface PersistedConfig {         // 存 storage.local，带 version + migrations
+interface SiteRule {                // 「我的网站」，见 §4.1
+  domain: string;                    // 规范化域名（小写、punycode），自动包含子域名
+  action: 'direct' | 'proxy';
+}
+
+interface PersistedConfig {         // 存 storage.local，带 version + migrations；当前 version = 2
   version: number;
   clients: Client[];
   settings: Settings;
   ruleSource: RuleSource;
+  siteRules: SiteRule[];             // v2 新增，最多 500 条；v1 → v2 迁移补空数组
 }
 
 interface RuleCache {                // 单独存，体积大，不参与导出
@@ -122,6 +129,7 @@ type ClientHealth =
 ```
 // Turnout <版本> <配置哈希> epoch=<pacEpoch>
 var ROUTE = "PROXY 127.0.0.1:7890; PROXY 127.0.0.1:xxxx";   // 由 settings 决定
+var SITE   = { "bank.com": "D", "x.org": "P" };  // 我的网站（§4.1），D = 直连，P = 走代理
 var EXCEPT = { "example.cn": 1, ... };      // @@ 例外（优先）
 var MATCH  = { "google.com": 1, ... };      // || 与可提取出域名的规则
 var REGEX  = [ /.../, ... ];                // 少量无法转成域名的规则，限制条数
@@ -131,7 +139,11 @@ function hit(table, host) {                 // 按后缀逐级查找：a.b.c.com
 function FindProxyForURL(url, host) {
   // 探测分支必须在所有规则之前（见 §5）
   if (host === "connectivitycheck.gstatic.com" && url.indexOf("turnout_probe=") > 0) return <按端口返回单一代理>;
+  if (host === "one.one.one.one") return ROUTE;           // 出口 IP 查询固定走当前出口（§6）
   if (isPlainHostName(host) || host === "127.0.0.1" || host === "localhost") return "DIRECT";
+  var s = site(host);                                     // 我的网站：最具体的一条生效
+  if (s === "D") return "DIRECT";
+  if (s === "P") return ROUTE;
   if (hit(EXCEPT, host)) return "DIRECT";
   if (hit(MATCH, host)) return ROUTE;
   for (...) if (REGEX[i].test(url)) return ROUTE;
@@ -159,8 +171,22 @@ function FindProxyForURL(url, host) {
   3. 失败：保留旧 `RuleCache`，写 `ruleUpdate.status = 'failed'` 与原因。
   4. 成功：写新 `RuleCache`，重新生成并应用 PAC。
 - 内置规则源：扩展包内打包一份离线副本（首次安装、离线时使用），并配置一个默认在线地址。
-  实现说明：当前打包的是 2026-09-28 的 GFWList 明文（`src/assets/rules/`，LGPL-2.1 原样分发）；默认在线地址尚未选定（§11），内置来源暂不在线更新，需要最新规则可用自定义订阅。
+  实现说明：离线副本为 2026-09-28 的 GFWList 明文（`src/assets/rules/`，LGPL-2.1 原样分发）；
+  在线地址为 `https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt`（它本身在 GFWList 中，智能分流时自动经客户端下载）。
+  首次安装不立即在线更新（此时通常还没有客户端，国内直连 GitHub 多半失败），在引导完成、PAC 生效后更新一次；之后按 `updateInterval` 定时更新，浏览器启动时若仍是离线副本也会尝试一次。
 - "通过当前客户端更新"：生成 PAC 时临时把订阅地址的域名加入 MATCH，更新完成后恢复。
+
+## 4.1 我的网站（按网站手动指定，第二版）
+
+目标是最少的概念：一张表，每条只有「域名」和「直连 / 走代理」两样。不支持正则、通配、路径，不做优先级编排，也不按网站指定客户端。
+
+- 域名自动包含所有子域名；输入时接受完整网址、`*.x.com`、`.x.com`，统一规范化后存储（`core/domain`）。
+- 生效顺序固定：本机地址 > 我的网站 > 订阅例外 > 订阅命中 > 直连。同一网站在表里有多级时，最具体的一条生效（PAC 按域名层数逐级查 `SITE` 表）。
+- 全部代理模式下只有「直连」条目生效（PAC 生成时只写入 `D` 条目），即常说的「直连白名单」。
+- 直连模式、出口跟随系统时不生效。
+- 入口：设置页「规则订阅」页中的「我的网站」（可一次粘贴多个域名）；弹窗「当前网站」一键设为直连 / 走代理（依赖 activeTab 读当前网址，§8）。
+- 弹窗说明「当前网站怎么走、为什么」由 `core/pac/explain.ts` 计算，其判断顺序与生成的 PAC 保持一致，由单测逐一对比。
+- 从 ZeroOmega 导入时条件规则不自动转换，导入结果页提示可在「我的网站」手动添加。
 
 ## 5. 健康检测与发现（core/health + platform/probe）
 
@@ -217,8 +243,9 @@ function FindProxyForURL(url, host) {
 - **LNA（本地网络访问限制）：不做检测，也不引导用户关闭 Chrome 安全开关。**M0 S2 在 Chrome 154 上实测，
   即使强制开启拦截，扩展请求与代理流量也不受影响；此前的风险来自第三方用户报告（Chrome 143/146 时期）。
   若日后收到可复现的 LNA 故障报告，再单独评估。
-- **出口 IP**：经当前路由请求一个 IP 回显服务（服务选择待定，需加入 host_permissions 并在隐私说明中披露）。
-  实现说明：服务选定前，弹窗状态卡显示「暂未启用」。
+- **出口 IP**：请求 Cloudflare trace `https://one.one.one.one/cdn-cgi/trace`，取 `ip=` 与 `loc=`（国家代码）。
+  PAC 对 `one.one.one.one` 固定返回当前出口的代理列表，所以显示的是经客户端出去的 IP；直连模式显示本机公网 IP，跟随系统时经系统代理。
+  结果带 `via`（查询时的出口），出口变化后旧结果作废；弹窗打开、出口变化、回落切换后自动重新查询。选用专用主机名而非 www.cloudflare.com，避免影响用户正常访问 Cloudflare 网站。
 
 ## 7. 存储与迁移
 
@@ -236,11 +263,13 @@ function FindProxyForURL(url, host) {
 | 权限 | 用途 |
 | --- | --- |
 | `proxy` | 设置浏览器代理与 PAC |
+| `activeTab` | 仅在用户点开弹窗时读取当前网站地址，用于「当前网站」一键设置（第二版确认） |
 | `storage` | 保存客户端列表、设置、规则缓存 |
 | `alarms` | 定时健康检测与规则更新 |
 | `host_permissions: http://127.0.0.1/*, http://localhost/*` | 检测本机代理客户端是否在线 |
 | `host_permissions: http://connectivitycheck.gstatic.com/*` | 经各客户端请求 204 地址，判断代理是否可用并测延迟 |
-| `host_permissions: <默认规则源域名>, <出口 IP 服务域名>` | 下载规则、显示出口 IP |
+| `host_permissions: https://raw.githubusercontent.com/*` | 下载内置规则（GFWList） |
+| `host_permissions: https://one.one.one.one/*` | 查询出口 IP（Cloudflare trace） |
 | `optional_host_permissions: <all_urls>` | 仅在用户填写自定义订阅地址时，按该域名运行时申请 |
 
 ## 9. 浏览器兼容
@@ -253,14 +282,13 @@ function FindProxyForURL(url, host) {
 | 里程碑 | 内容 | 完成标准 |
 | --- | --- | --- |
 | M0 技术验证（已完成 2026-09-28） | S1 成立（需探测域名权限、epoch、金丝雀）；S2 LNA 不影响扩展与代理；S3 哈希 PAC 到 5 万条无可测影响；S4 能唤醒但有限制 | 结论见 `docs/spikes/README.md`；万达云已补测（S5），Edge 待补测 |
-| M1 core | config（类型、zod、迁移）、rules 解析编译、pac 生成、health 状态机、ZeroOmega 导入转换 | 单测覆盖所有分支；PAC 快照测试。**状态：除 ZeroOmega 导入外已完成** |
+| M1 core | config（类型、zod、迁移）、rules 解析编译、pac 生成、health 状态机、ZeroOmega 导入转换 | 单测覆盖所有分支；PAC 快照测试。**状态：已完成（ZeroOmega 导入于第二版补齐）** |
 | M2 后台与弹窗 | background 编排、chrome 适配层、弹窗（正常、已切备用、被接管、全部连不上） | Playwright 冒烟测试（CI 用 Playwright 自带 Chromium；需要品牌版行为的用例沿用 `spikes/lib/launch.js`）：切换模式/出口后 PAC 正确。**状态：已完成（`e2e/smoke.mjs`、`e2e/failover.mjs`）** |
 | M3 引导与设置 | 首次引导、设置页（客户端、备用与回落、规则订阅、备份与导入） | 与 `docs/design/` 设计稿一致。**状态：已实现首版，待人工对照设计稿验收** |
 | M4 稳定性 | 订阅失败处理、冲突与全部离线引导、导出导入、迁移备份 | 所有异常状态可复现并有 UI 反馈 |
+| 第二版 | 我的网站（§4.1）、出口 IP、内置规则在线更新、ZeroOmega 导入 | `e2e/v2.mjs`：规则进 PAC、弹窗一键设置、出口 IP、导入、v1→v2 迁移与备份。**状态：已完成** |
 | M5 上架 | 图标、商店素材、隐私政策、权限说明、`wxt zip` | 通过 Chrome 商店审核 |
 
 ## 11. 待定事项
 
-- 默认规则源（GFWList 或"国内直连"类列表）与在线地址
-- 出口 IP 回显服务的选择
 - 开源许可证（本项目不复制 GPL 代码，MIT 与 GPL-3.0 均可选）

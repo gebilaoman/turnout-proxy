@@ -1,7 +1,7 @@
 import { defineConfig } from 'wxt';
 
 // 权限清单见 CLAUDE.md「权限与商店合规」与 docs/ARCHITECTURE.md §8。修改前必须先停下来确认。
-// 默认规则源与出口 IP 服务的域名尚未选定（ARCHITECTURE §11），选定后再加入 host_permissions。
+// v2（2026-09-28 确认）：activeTab 用于弹窗读取当前网站；one.one.one.one 为出口 IP 查询；raw.githubusercontent.com 为内置规则在线地址。
 export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-react', '@wxt-dev/i18n/module'],
@@ -11,8 +11,14 @@ export default defineConfig({
     name: 'Turnout – Proxy Switcher',
     description: '__MSG_extDescription__',
     default_locale: 'zh_CN',
-    permissions: ['proxy', 'storage', 'alarms'],
-    host_permissions: ['http://127.0.0.1/*', 'http://localhost/*', 'http://connectivitycheck.gstatic.com/*'],
+    permissions: ['proxy', 'storage', 'alarms', 'activeTab'],
+    host_permissions: [
+      'http://127.0.0.1/*',
+      'http://localhost/*',
+      'http://connectivitycheck.gstatic.com/*',
+      'https://one.one.one.one/*',
+      'https://raw.githubusercontent.com/*',
+    ],
     // 仅在用户填写自定义订阅地址时，按该域名运行时申请（ARCHITECTURE §8）
     optional_host_permissions: ['https://*/*', 'http://*/*'],
     action: { default_title: 'Turnout' },
