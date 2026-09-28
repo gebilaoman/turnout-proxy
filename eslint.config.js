@@ -15,7 +15,7 @@ export default tseslint.config(
     // 端到端脚本在 Node 中运行，传给 evaluate 的回调在浏览器 / 扩展上下文中运行
     files: ['e2e/**/*.mjs'],
     languageOptions: {
-      globals: { process: 'readonly', console: 'readonly', setTimeout: 'readonly', chrome: 'readonly', document: 'readonly', location: 'readonly' },
+      globals: { process: 'readonly', console: 'readonly', setTimeout: 'readonly', chrome: 'readonly', document: 'readonly', location: 'readonly', window: 'readonly' },
     },
     rules: { 'no-control-regex': 'off' },
   },

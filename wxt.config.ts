@@ -11,6 +11,9 @@ export default defineConfig({
     name: 'Turnout – Proxy Switcher',
     description: '__MSG_extDescription__',
     default_locale: 'zh_CN',
+    homepage_url: 'https://github.com/gebilaoman/turnout-proxy',
+    // structuredClone、Intl.DisplayNames、MV3 proxy / alarms Promise 接口在此版本前均已稳定
+    minimum_chrome_version: '116',
     permissions: ['proxy', 'storage', 'alarms', 'activeTab'],
     host_permissions: [
       'http://127.0.0.1/*',

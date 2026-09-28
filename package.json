@@ -2,7 +2,9 @@
   "name": "turnout-proxy",
   "description": "Turnout – Proxy Switcher：多本地代理客户端的 Chrome 代理切换扩展",
   "private": true,
-  "version": "0.2.0",
+  "license": "GPL-3.0-only",
+  "homepage": "https://github.com/gebilaoman/turnout-proxy",
+  "version": "0.2.1",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -12,6 +14,7 @@
     "dev": "wxt",
     "build": "wxt build",
     "zip": "wxt zip",
+    "store:assets": "wxt build && node e2e/store-assets.mjs",
     "postinstall": "wxt prepare",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

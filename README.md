@@ -54,6 +54,20 @@ src/locales/       界面文案（i18n）
 spikes/            M0 技术验证脚本（一次性，不属于产品代码）
 ```
 
+## 发布到 Chrome 应用商店
+
+```bash
+pnpm check && pnpm e2e     # 全部通过后
+pnpm store:assets          # 重新生成商店截图与宣传图（docs/store/）
+pnpm zip                   # 生成 .output/turnout-proxy-<版本>-chrome.zip
+```
+
+表单内容（描述、单一用途、权限理由、数据使用声明）见 [docs/store/listing.md](docs/store/listing.md)，隐私政策见 [PRIVACY.md](PRIVACY.md)。每次上传前记得递增 `package.json` 的版本号。
+
+## 许可证
+
+[GPL-3.0](LICENSE)。内置的 GFWList 规则（`src/assets/rules/gfwlist.txt`）以 LGPL-2.1 原样分发。
+
 ## 尚未完成
 
 - 深色主题、Firefox 版

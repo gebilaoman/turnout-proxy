@@ -165,8 +165,11 @@ export function App() {
                     <div className={s.state}>
                       {c.state === 'http' ? i18n.t('health.listening') : c.state === 'maybe_socks' ? i18n.t('health.pendingSocks') : i18n.t('onboarding.manual')}
                     </div>
-                    {rank === 0 && <span className={s.badge}>{i18n.t('options.clients.default')}</span>}
-                    {rank === 1 && <span className={s.badgeMuted}>{i18n.t('options.clients.backup')}</span>}
+                    {/* 固定宽度的标签位，各行布局一致 */}
+                    <span className={s.badgeSlot}>
+                      {rank === 0 && <span className={s.badge}>{i18n.t('options.clients.default')}</span>}
+                      {rank === 1 && <span className={s.badgeMuted}>{i18n.t('options.clients.backup')}</span>}
+                    </span>
                   </div>
                 );
               })}
@@ -197,6 +200,7 @@ export function App() {
               </div>
             </div>
             {error && <div className={ui.error}>{error}</div>}
+            <div className={s.muted}>{i18n.t('onboarding.latencyLater')}</div>
             <div className={s.footer}>
               <a
                 href="#"
@@ -208,7 +212,6 @@ export function App() {
               >
                 {i18n.t('onboarding.importZeroOmega')}
               </a>
-              <span className={s.muted}>{i18n.t('onboarding.latencyLater')}</span>
               <div className={s.grow} />
               <Button variant="primary" className={s.bigBtn} disabled={chosen.length === 0} onClick={() => setStep(2)}>
                 {i18n.t('common.next')}
