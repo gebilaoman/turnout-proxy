@@ -1,0 +1,129 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Main.dc.html": {
+      "h": 600,
+      "is_interactive": true,
+      "radius": 12,
+      "title": "弹窗 · 正常（可点击）",
+      "w": 360,
+      "x": 0,
+      "y": 0
+    },
+    "Onboarding.dc.html": {
+      "h": 680,
+      "title": "首次引导 · 发现客户端",
+      "w": 960,
+      "x": 0,
+      "y": 1000
+    },
+    "PopupConflict.dc.html": {
+      "h": 600,
+      "radius": 12,
+      "title": "弹窗 · 被其他扩展接管",
+      "w": 360,
+      "x": 880,
+      "y": 0
+    },
+    "PopupAllDown.dc.html": {
+      "h": 600,
+      "radius": 12,
+      "title": "弹窗 · 所有客户端都连不上",
+      "w": 360,
+      "x": 1320,
+      "y": 0
+    },
+    "PopupOffline.dc.html": {
+      "h": 600,
+      "radius": 12,
+      "title": "弹窗 · 客户端离线，已切备用",
+      "w": 360,
+      "x": 440,
+      "y": 0
+    },
+    "SettingsClients.dc.html": {
+      "h": 820,
+      "title": "设置 · 客户端与备用",
+      "w": 1280,
+      "x": 0,
+      "y": 2000
+    },
+    "SettingsRules.dc.html": {
+      "h": 820,
+      "title": "设置 · 规则订阅（更新失败）",
+      "w": 1280,
+      "x": 1360,
+      "y": 2000
+    },
+    "Logo.dc.html": {
+      "h": 760,
+      "title": "Logo · 主方案「道岔」与备选",
+      "w": 1280,
+      "x": 0,
+      "y": 3200
+    },
+    "LogoStates.dc.html": {
+      "h": 760,
+      "title": "Logo · 工具栏图标状态与尺寸",
+      "w": 1280,
+      "x": 1360,
+      "y": 3200
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-28T10:30:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "t_onboard": {
+      "kind": "title1",
+      "maxW": 960,
+      "text": "首次引导",
+      "w": 240,
+      "x": 0,
+      "y": 700
+    },
+    "t_popup": {
+      "kind": "title1",
+      "maxW": 1680,
+      "text": "弹窗：正常与异常状态",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t_logo": {
+      "kind": "title1",
+      "maxW": 2640,
+      "text": "Logo",
+      "w": 240,
+      "x": 0,
+      "y": 2900
+    },
+    "t_settings": {
+      "kind": "title1",
+      "maxW": 2640,
+      "text": "设置页",
+      "w": 240,
+      "x": 0,
+      "y": 1700
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "PopupOffline.dc.html",
+    "PopupConflict.dc.html",
+    "PopupAllDown.dc.html",
+    "Onboarding.dc.html",
+    "SettingsClients.dc.html",
+    "SettingsRules.dc.html",
+    "Logo.dc.html",
+    "LogoStates.dc.html"
+  ],
+  "pages": [],
+  "title": "代理切换扩展 UI 设计"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "turnout-spikes",
+  "private": true,
+  "type": "module",
+  "description": "M0 技术验证用的一次性脚本，不属于产品代码",
+  "scripts": {},
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

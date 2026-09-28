@@ -1,0 +1,52 @@
+{
+ "万达云 127.0.0.1:7892": {
+  "ok": true,
+  "status": 400,
+  "type": "basic",
+  "via": null,
+  "ms": 48
+ },
+ "万达云 localhost:7892": {
+  "ok": true,
+  "status": 400,
+  "type": "basic",
+  "via": null,
+  "ms": 3
+ },
+ "FlClash 127.0.0.1:7890": {
+  "ok": true,
+  "status": 400,
+  "type": "basic",
+  "via": null,
+  "ms": 4
+ }
+}
+┌─────────┬──────────┬───────┬───────────┬──────────────────────────────────┬──────┐
+│ (index) │ k        │ ok    │ status    │ error                            │ ms   │
+├─────────┼──────────┼───────┼───────────┼──────────────────────────────────┼──────┤
+│ 0       │ '7892'   │ true  │ 502       │ undefined                        │ 2751 │
+│ 1       │ '7892s'  │ false │ undefined │ 'TypeError: Failed to fetch'     │ 2570 │
+│ 2       │ '7890'   │ false │ undefined │ 'AbortError: signal is aborted ' │ 5004 │
+│ 3       │ '7890s'  │ false │ undefined │ 'AbortError: signal is aborted ' │ 5002 │
+│ 4       │ 'canary' │ false │ undefined │ 'TypeError: Failed to fetch'     │ 4    │
+│ 5       │ '7892'   │ true  │ 502       │ undefined                        │ 3362 │
+│ 6       │ '7892s'  │ false │ undefined │ 'TypeError: Failed to fetch'     │ 3829 │
+│ 7       │ '7890'   │ true  │ 204       │ undefined                        │ 1203 │
+│ 8       │ '7890s'  │ true  │ 204       │ undefined                        │ 3228 │
+│ 9       │ 'canary' │ false │ undefined │ 'TypeError: Failed to fetch'     │ 4    │
+│ 10      │ '7892'   │ true  │ 502       │ undefined                        │ 2246 │
+│ 11      │ '7892s'  │ false │ undefined │ 'TypeError: Failed to fetch'     │ 3154 │
+│ 12      │ '7890'   │ true  │ 204       │ undefined                        │ 192  │
+│ 13      │ '7890s'  │ true  │ 204       │ undefined                        │ 185  │
+│ 14      │ 'canary' │ false │ undefined │ 'TypeError: Failed to fetch'     │ 4    │
+│ 15      │ '7892'   │ true  │ 502       │ undefined                        │ 3614 │
+│ 16      │ '7892s'  │ false │ undefined │ 'TypeError: Failed to fetch'     │ 3108 │
+│ 17      │ '7890'   │ true  │ 204       │ undefined                        │ 183  │
+│ 18      │ '7890s'  │ true  │ 204       │ undefined                        │ 186  │
+│ 19      │ 'canary' │ false │ undefined │ 'TypeError: Failed to fetch'     │ 3    │
+│ 20      │ '7892'   │ true  │ 502       │ undefined                        │ 2675 │
+│ 21      │ '7892s'  │ false │ undefined │ 'TypeError: Failed to fetch'     │ 3793 │
+│ 22      │ '7890'   │ true  │ 204       │ undefined                        │ 188  │
+│ 23      │ '7890s'  │ true  │ 204       │ undefined                        │ 184  │
+│ 24      │ 'canary' │ false │ undefined │ 'TypeError: Failed to fetch'     │ 2    │
+└─────────┴──────────┴───────┴───────────┴──────────────────────────────────┴──────┘

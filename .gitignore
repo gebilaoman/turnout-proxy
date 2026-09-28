@@ -1,0 +1,7 @@
+node_modules/
+.output/
+.wxt/
+spikes/node_modules/
+spikes/data/
+.DS_Store
+e2e/shots/

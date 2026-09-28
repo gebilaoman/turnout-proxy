@@ -1,0 +1,453 @@
+{
+  "Finch 默认（真实种子） / host_permissions=有": {
+    "sw": {
+      "FlClash 7890": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "via": null,
+        "ms": 22
+      },
+      "FlClash localhost:7890": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "via": null,
+        "ms": 7
+      },
+      "privoxy 1087": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "via": null,
+        "ms": 69
+      },
+      "ss-local 1086 (SOCKS)": {
+        "ok": false,
+        "error": "AbortError: signal is aborted without reason",
+        "name": "AbortError",
+        "ms": 4002
+      },
+      "关闭端口 18099": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 3
+      },
+      "本地 HTTP 18081": {
+        "ok": true,
+        "status": 200,
+        "type": "basic",
+        "via": "18081",
+        "ms": 19
+      }
+    },
+    "extPage": {
+      "FlClash 7890": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "ms": 4
+      },
+      "FlClash localhost:7890": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "ms": 3
+      },
+      "privoxy 1087": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "ms": 7
+      },
+      "ss-local 1086 (SOCKS)": {
+        "ok": false,
+        "error": "AbortError: signal is aborted without reason",
+        "name": "AbortError",
+        "ms": 4002
+      },
+      "关闭端口 18099": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 4
+      },
+      "本地 HTTP 18081": {
+        "ok": true,
+        "status": 200,
+        "type": "basic",
+        "ms": 3
+      }
+    },
+    "swPerms": {
+      "local-network-access": "prompt",
+      "loopback-network": "prompt",
+      "local-network": "prompt"
+    },
+    "extPagePerms": {
+      "local-network-access": "prompt",
+      "loopback-network": "prompt",
+      "local-network": "prompt"
+    },
+    "webPage": {
+      "ok": true,
+      "status": 200,
+      "ms": 3801
+    },
+    "webPerms": {
+      "local-network-access": "granted",
+      "loopback-network": "granted",
+      "local-network": "prompt"
+    },
+    "viaLocalProxy": {
+      "http://site.turnout.test/nav": 200,
+      "https://www.gstatic.com/generate_204": "ERR page.goto: net::ERR_CONNECTION_CLOSED at https://www.gstatic.com/generate_204",
+      "example.com 页面内 fetch(https://www.gstatic.com/generate_204) 经本地代理": "ERR TypeError: Failed to fetch"
+    },
+    "logproxyHits": [
+      "GET /",
+      "GET /",
+      "GET /",
+      "GET http://site.turnout.test/nav",
+      "GET http://site.turnout.test/favicon.ico"
+    ],
+    "console": [
+      "[page error] Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "[error] Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "[page error] Failed to load resource: the server responded with a status of 400 (Invalid header received from client)",
+      "[error] Failed to load resource: the server responded with a status of 400 (Invalid header received from client)",
+      "[page error] Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "[error] Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "[web error] Failed to load resource: net::ERR_CONNECTION_CLOSED",
+      "[error] Failed to load resource: net::ERR_CONNECTION_CLOSED"
+    ]
+  },
+  "Finch 默认（真实种子） / host_permissions=无": {
+    "sw": {
+      "FlClash 7890": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 35
+      },
+      "FlClash localhost:7890": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 2
+      },
+      "privoxy 1087": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 3
+      },
+      "ss-local 1086 (SOCKS)": {
+        "ok": false,
+        "error": "AbortError: signal is aborted without reason",
+        "name": "AbortError",
+        "ms": 4003
+      },
+      "关闭端口 18099": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 5
+      },
+      "本地 HTTP 18081": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "via": "18081",
+        "ms": 8
+      }
+    },
+    "extPage": {
+      "FlClash 7890": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 4
+      },
+      "FlClash localhost:7890": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 9
+      },
+      "privoxy 1087": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 3
+      },
+      "ss-local 1086 (SOCKS)": {
+        "ok": false,
+        "error": "AbortError: signal is aborted without reason",
+        "name": "AbortError",
+        "ms": 4003
+      },
+      "关闭端口 18099": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 7
+      },
+      "本地 HTTP 18081": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "ms": 4
+      }
+    },
+    "swPerms": {
+      "local-network-access": "prompt",
+      "loopback-network": "prompt",
+      "local-network": "prompt"
+    },
+    "extPagePerms": {
+      "local-network-access": "prompt",
+      "loopback-network": "prompt",
+      "local-network": "prompt"
+    },
+    "console": [
+      "[page error] Access to fetch at 'http://127.0.0.1:7890/' from origin 'chrome-extension://ghgckjbiidkkdagfinmmonghioiedkdk' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[error] Access to fetch at 'http://127.0.0.1:7890/' from origin 'chrome-extension://ghgckjbiidkkdagfinmmonghioiedkdk' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[page error] Failed to load resource: net::ERR_FAILED",
+      "[error] Failed to load resource: net::ERR_FAILED",
+      "[page error] Access to fetch at 'http://localhost:7890/' from origin 'chrome-extension://ghgckjbiidkkdagfinmmonghioiedkdk' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[error] Access to fetch at 'http://localhost:7890/' from origin 'chrome-extension://ghgckjbiidkkdagfinmmonghioiedkdk' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[page error] Access to fetch at 'http://127.0.0.1:1087/' from origin 'chrome-extension://ghgckjbiidkkdagfinmmonghioiedkdk' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[error] Access to fetch at 'http://127.0.0.1:1087/' from origin 'chrome-extension://ghgckjbiidkkdagfinmmonghioiedkdk' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[page error] Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "[error] Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ]
+  },
+  "强制 Enabled (Blocking) / host_permissions=有": {
+    "sw": {
+      "FlClash 7890": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "via": null,
+        "ms": 4
+      },
+      "FlClash localhost:7890": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "via": null,
+        "ms": 3
+      },
+      "privoxy 1087": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "via": null,
+        "ms": 3
+      },
+      "ss-local 1086 (SOCKS)": {
+        "ok": false,
+        "error": "AbortError: signal is aborted without reason",
+        "name": "AbortError",
+        "ms": 4003
+      },
+      "关闭端口 18099": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 5
+      },
+      "本地 HTTP 18081": {
+        "ok": true,
+        "status": 200,
+        "type": "basic",
+        "via": "18081",
+        "ms": 6
+      }
+    },
+    "extPage": {
+      "FlClash 7890": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "ms": 5
+      },
+      "FlClash localhost:7890": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "ms": 3
+      },
+      "privoxy 1087": {
+        "ok": true,
+        "status": 400,
+        "type": "basic",
+        "ms": 2
+      },
+      "ss-local 1086 (SOCKS)": {
+        "ok": false,
+        "error": "AbortError: signal is aborted without reason",
+        "name": "AbortError",
+        "ms": 4002
+      },
+      "关闭端口 18099": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 6
+      },
+      "本地 HTTP 18081": {
+        "ok": true,
+        "status": 200,
+        "type": "basic",
+        "ms": 3
+      }
+    },
+    "swPerms": {
+      "local-network-access": "prompt",
+      "loopback-network": "prompt",
+      "local-network": "prompt"
+    },
+    "extPagePerms": {
+      "local-network-access": "prompt",
+      "loopback-network": "prompt",
+      "local-network": "prompt"
+    },
+    "webPage": {
+      "ok": false,
+      "error": "AbortError: signal is aborted without reason",
+      "ms": 4002
+    },
+    "webPerms": {
+      "local-network-access": "prompt",
+      "loopback-network": "prompt",
+      "local-network": "prompt"
+    },
+    "viaLocalProxy": {
+      "http://site.turnout.test/nav": 200,
+      "https://www.gstatic.com/generate_204": "ERR page.goto: net::ERR_ABORTED at https://www.gstatic.com/generate_204",
+      "example.com 页面内 fetch(https://www.gstatic.com/generate_204) 经本地代理": "ERR TypeError: Failed to fetch"
+    },
+    "logproxyHits": [
+      "GET /",
+      "GET /",
+      "GET /",
+      "GET /",
+      "GET http://site.turnout.test/nav",
+      "GET http://site.turnout.test/favicon.ico"
+    ],
+    "console": [
+      "[page error] Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "[error] Failed to load resource: the server responded with a status of 400 (Bad Request)",
+      "[page error] Failed to load resource: the server responded with a status of 400 (Invalid header received from client)",
+      "[error] Failed to load resource: the server responded with a status of 400 (Invalid header received from client)",
+      "[page error] Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "[error] Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "[web error] Failed to load resource: net::ERR_CONNECTION_CLOSED",
+      "[error] Failed to load resource: net::ERR_CONNECTION_CLOSED"
+    ]
+  },
+  "强制 Enabled (Blocking) / host_permissions=无": {
+    "sw": {
+      "FlClash 7890": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 6
+      },
+      "FlClash localhost:7890": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 4
+      },
+      "privoxy 1087": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 50
+      },
+      "ss-local 1086 (SOCKS)": {
+        "ok": false,
+        "error": "AbortError: signal is aborted without reason",
+        "name": "AbortError",
+        "ms": 4003
+      },
+      "关闭端口 18099": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 5
+      },
+      "本地 HTTP 18081": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "via": "18081",
+        "ms": 13
+      }
+    },
+    "extPage": {
+      "FlClash 7890": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 3
+      },
+      "FlClash localhost:7890": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 4
+      },
+      "privoxy 1087": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 3
+      },
+      "ss-local 1086 (SOCKS)": {
+        "ok": false,
+        "error": "AbortError: signal is aborted without reason",
+        "name": "AbortError",
+        "ms": 4002
+      },
+      "关闭端口 18099": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 2
+      },
+      "本地 HTTP 18081": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "ms": 2
+      }
+    },
+    "swPerms": {
+      "local-network-access": "prompt",
+      "loopback-network": "prompt",
+      "local-network": "prompt"
+    },
+    "extPagePerms": {
+      "local-network-access": "prompt",
+      "loopback-network": "prompt",
+      "local-network": "prompt"
+    },
+    "console": [
+      "[page error] Access to fetch at 'http://127.0.0.1:7890/' from origin 'chrome-extension://dpihljmingedkafapfdcelbjocndaloe' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[error] Access to fetch at 'http://127.0.0.1:7890/' from origin 'chrome-extension://dpihljmingedkafapfdcelbjocndaloe' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[page error] Failed to load resource: net::ERR_FAILED",
+      "[error] Failed to load resource: net::ERR_FAILED",
+      "[page error] Access to fetch at 'http://localhost:7890/' from origin 'chrome-extension://dpihljmingedkafapfdcelbjocndaloe' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[error] Access to fetch at 'http://localhost:7890/' from origin 'chrome-extension://dpihljmingedkafapfdcelbjocndaloe' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[page error] Access to fetch at 'http://127.0.0.1:1087/' from origin 'chrome-extension://dpihljmingedkafapfdcelbjocndaloe' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[error] Access to fetch at 'http://127.0.0.1:1087/' from origin 'chrome-extension://dpihljmingedkafapfdcelbjocndaloe' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "[page error] Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "[error] Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ]
+  }
+}

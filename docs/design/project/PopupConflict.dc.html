@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>弹窗 · 被其他扩展接管</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Noto+Sans+SC:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"IBM Plex Sans","Noto Sans SC",system-ui,sans-serif;color:#1B1B18;background:#F6F6F3}
+a{color:#2B59C3}a:hover{color:#1E4296}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 360px; height: 600px; box-sizing: border-box; background: #F6F6F3; display: flex; flex-direction: column; font-size: 13px;">
+  <div style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #FFFFFF; border-bottom: 1px solid #E3E2DC;">
+    <svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true"><rect x="0.5" y="0.5" width="15" height="15" rx="4" fill="#B3261E"></rect><g opacity="0.4"><path d="M8 13.2V9.8C8 7.4 5 7.2 5 3.8M8 9.8C8 7.4 11 7.2 11 3.8" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
+    <div style="flex-grow: 1; font-size: 15px; font-weight: 600;">Turnout</div>
+  </div>
+
+  <div style="margin: 14px 16px 0; padding: 16px; background: #FBEAE8; border: 1px solid #E8B4AE; border-radius: 12px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; align-items: flex-start; gap: 8px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B3261E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="10"></circle><path d="M4.9 4.9l14.2 14.2"></path></svg>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-size: 14px; font-weight: 600; color: #8C1D17;">代理设置被其他扩展接管</div>
+        <div style="font-size: 12px; color: #6E1712; line-height: 1.5;">「Proxy SwitchyOmega 3 (ZeroOmega)」正在控制 Chrome 的代理，这里的切换不会生效。</div>
+      </div>
+    </div>
+    <div style="padding: 10px 12px; background: #FFFFFF; border-radius: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; line-height: 1.5;">
+      <div style="font-weight: 500;">解决方法</div>
+      <div style="color: #3D3C38;">1. 在扩展管理页停用上面这个扩展</div>
+      <div style="color: #3D3C38;">2. 回到这里，点击「重新检测」</div>
+      <div style="color: #5C5B55;">想保留它的代理服务器？先在设置里「从 ZeroOmega 导入」。</div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button style="flex-grow: 1; height: 36px; border: 0; border-radius: 8px; background: #B3261E; color: #FFFFFF; font-size: 13px; font-weight: 500; cursor: pointer;">打开扩展管理页</button>
+      <button style="height: 36px; padding: 0 14px; border: 1px solid #B3261E; border-radius: 8px; background: #FFFFFF; color: #8C1D17; font-size: 13px; cursor: pointer;">重新检测</button>
+    </div>
+  </div>
+
+  <div style="margin: 16px 16px 0; display: flex; flex-direction: column; gap: 8px; opacity: 0.45;">
+    <div style="font-size: 12px; font-weight: 500; color: #5C5B55;">模式</div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; background: #EBEAE5; border-radius: 10px;">
+      <button disabled="" style="height: 34px; border: 0; border-radius: 7px; background: #FFFFFF; font-size: 13px; font-weight: 600; color: #1B1B18;">智能分流</button>
+      <button disabled="" style="height: 34px; border: 0; border-radius: 7px; background: transparent; font-size: 13px; color: #5C5B55;">全部代理</button>
+      <button disabled="" style="height: 34px; border: 0; border-radius: 7px; background: transparent; font-size: 13px; color: #5C5B55;">直连</button>
+    </div>
+    <div style="font-size: 12px; font-weight: 500; color: #5C5B55; margin-top: 8px;">出口</div>
+    <div style="height: 52px; padding: 0 12px; border-radius: 10px; background: #FFFFFF; border: 1px solid #E3E2DC; display: flex; align-items: center; font-size: 13px;">FlClash</div>
+    <div style="height: 52px; padding: 0 12px; border-radius: 10px; background: #FFFFFF; border: 1px solid #E3E2DC; display: flex; align-items: center; font-size: 13px;">万达云</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":360,"height":600}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

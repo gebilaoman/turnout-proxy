@@ -1,0 +1,42 @@
+{
+  "name": "turnout-proxy",
+  "description": "Turnout – Proxy Switcher：多本地代理客户端的 Chrome 代理切换扩展",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.5.2",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "postinstall": "wxt prepare",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "e2e": "wxt build && node e2e/smoke.mjs && node e2e/failover.mjs"
+  },
+  "dependencies": {
+    "@webext-core/messaging": "^4.0.0",
+    "@wxt-dev/i18n": "^0.2.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "zod": "^4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10",
+    "@types/node": "^24",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@wxt-dev/module-react": "^1.2.2",
+    "eslint": "^10",
+    "playwright": "^1.63.0",
+    "typescript": "~6.0",
+    "typescript-eslint": "^8",
+    "vitest": "^5",
+    "wxt": "^0.21"
+  }
+}

@@ -1,0 +1,5 @@
+http://cp.cloudflare.com/generate_204 {"ok":false,"error":"TypeError: Failed to fetch","name":"TypeError","ms":49} [ 'CONNECT cp.cloudflare.com:443' ]
+http://www.gstatic.com/generate_204 {"ok":true,"status":502,"type":"basic","via":null,"ms":333} []
+http://connectivitycheck.gstatic.com/generate_204 {"ok":true,"status":204,"type":"basic","via":null,"ms":1373} []
+http://captive.apple.com/hotspot-detect.html {"ok":true,"status":200,"type":"basic","via":null,"ms":422} []
+http://detectportal.firefox.com/success.txt {"ok":true,"status":200,"type":"basic","via":null,"ms":270} []

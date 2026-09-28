@@ -1,0 +1,15 @@
+{
+  "version": "154.0.8037.58",
+  "steps": [
+    { "name": "对照 A：停止后什么也不做", "statusBeforeAction": "stopped", "statusAfter": "stopped", "log": [] },
+    { "name": "对照 B：停止后访问直连站点", "statusBeforeAction": "stopped", "statusAfter": "stopped", "log": [] },
+    { "name": "阳性对照：停止后 chrome.alarms 到点", "statusBeforeAction": "stopped", "statusAfter": "running", "log": ["alarm wake bootAt=1790560379012"] },
+    { "name": "测试 1：停止后网页请求经死代理（fatal）", "statusBeforeAction": "stopped", "statusAfter": "running",
+      "log": ["proxyError net::ERR_PROXY_CONNECTION_FAILED fatal=true bootAt=1790560382164", "proxyError net::ERR_PROXY_CONNECTION_FAILED fatal=true bootAt=1790560382164"] },
+    { "name": "测试 2：停止后网页请求主死备活（回落）", "statusBeforeAction": "stopped", "statusAfter": "stopped", "log": [] },
+    { "name": "测试 3：停止后扩展页 fetch 经死代理", "statusBeforeAction": "stopped", "statusAfter": "running",
+      "log": ["proxyError net::ERR_PROXY_CONNECTION_FAILED fatal=true bootAt=1790560387820"] }
+  ],
+  "awakeFallback": { "log": [], "hits": ["18082 http://fallback.s4test/x", "18082 http://fallback.s4test/favicon.ico"] },
+  "naturalIdleStopAfterSec": null
+}

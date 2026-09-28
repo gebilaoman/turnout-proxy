@@ -1,0 +1,10 @@
+{
+  "FlClash PROXY gstatic": { "ok": false, "error": "AbortError: signal is aborted without reason", "name": "AbortError", "ms": 5007 },
+  "FlClash SOCKS5 gstatic": { "ok": false, "error": "AbortError: signal is aborted without reason", "name": "AbortError", "ms": 5005 },
+  "FlClash PROXY cloudflare": { "ok": false, "error": "TypeError: Failed to fetch", "name": "TypeError", "ms": 537 },
+  "privoxy 1087 上游坏": { "ok": true, "status": 500, "type": "basic", "via": null, "ms": 16 },
+  "ss-local 1086 上游坏": { "ok": false, "error": "TypeError: Failed to fetch", "name": "TypeError", "ms": 3 },
+  "站点：主 18085 死 → 备": { "res": { "ok": true, "status": 200, "type": "cors", "via": "18082", "ms": 7 }, "hits": ["18082 GET http://site.turnout.test/1"] },
+  "主恢复（被标坏中），单一代理探测主": { "res": { "ok": true, "status": 204, "type": "cors", "via": "18085", "ms": 2 }, "hits": ["18085 GET http://probe.turnout.test/generate_204?turnout_probe=18085"] },
+  "主恢复后普通站点仍走备？": { "res": { "ok": true, "status": 200, "type": "cors", "via": "18082", "ms": 1 }, "hits": ["18082 GET http://site.turnout.test/2"] }
+}

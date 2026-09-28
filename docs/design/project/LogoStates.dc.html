@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Logo · 图标状态与尺寸</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Noto+Sans+SC:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"IBM Plex Sans","Noto Sans SC",system-ui,sans-serif;color:#1B1B18;background:#F6F6F3}
+</style>
+</helmet>
+<div style="width: 1280px; height: 760px; box-sizing: border-box; background: #F6F6F3; padding: 48px; display: flex; flex-direction: column; gap: 28px;">
+  <div style="display: flex; flex-direction: column; gap: 6px;">
+    <div style="font-size: 24px; font-weight: 600;">工具栏图标：一个形状，四种状态</div>
+    <div style="font-size: 14px; color: #5C5B55;">底色表示健康状况，亮的轨道表示当前出口。16px 使用单独简化的线宽，保证在工具栏里清晰。</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;">
+    <sc-for list="{{states}}" as="s" hint-placeholder-count="4">
+      <div style="background: #FFFFFF; border: 1px solid #E3E2DC; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="width: 10px; height: 10px; border-radius: 50%; background: {{s.tile}};"></span>
+          <span style="font-size: 15px; font-weight: 600;">{{s.label}}</span>
+        </div>
+        <svg width="128" height="128" viewBox="0 0 128 128" aria-hidden="true">
+          <rect x="8" y="8" width="112" height="112" rx="28" fill="{{s.tile}}"></rect>
+          <path d="M64 104V78C64 56 40 54 40 30" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.left}}" stroke-width="13" stroke-linecap="round"></path>
+          <path d="M64 104V78C64 56 88 54 88 30" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.right}}" stroke-width="13" stroke-linecap="round"></path>
+          <g opacity="{{s.both}}"><path d="M64 104V78C64 56 40 54 40 30M64 78C64 56 88 54 88 30" fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"></path></g>
+          <path d="M64 104V30" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.straight}}" stroke-width="13" stroke-linecap="round"></path>
+        </svg>
+        <div style="display: flex; align-items: flex-end; gap: 16px; padding-top: 4px;">
+          <svg width="48" height="48" viewBox="0 0 128 128" aria-hidden="true">
+            <rect x="8" y="8" width="112" height="112" rx="28" fill="{{s.tile}}"></rect>
+            <path d="M64 104V78C64 56 40 54 40 30" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.left}}" stroke-width="14" stroke-linecap="round"></path>
+            <path d="M64 104V78C64 56 88 54 88 30" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.right}}" stroke-width="14" stroke-linecap="round"></path>
+            <g opacity="{{s.both}}"><path d="M64 104V78C64 56 40 54 40 30M64 78C64 56 88 54 88 30" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path></g>
+            <path d="M64 104V30" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.straight}}" stroke-width="14" stroke-linecap="round"></path>
+          </svg>
+          <svg width="32" height="32" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="15" height="15" rx="4" fill="{{s.tile}}"></rect>
+            <path d="M8 13.2V9.8C8 7.4 5 7.2 5 3.8" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.left}}" stroke-width="2" stroke-linecap="round"></path>
+            <path d="M8 13.2V9.8C8 7.4 11 7.2 11 3.8" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.right}}" stroke-width="2" stroke-linecap="round"></path>
+            <g opacity="{{s.both}}"><path d="M8 13.2V9.8C8 7.4 5 7.2 5 3.8M8 9.8C8 7.4 11 7.2 11 3.8" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g>
+            <path d="M8 13.2V3.8" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.straight}}" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="0" y="0" width="16" height="16" rx="4" fill="{{s.tile}}"></rect>
+            <path d="M8 13.5V9.8C8 7.4 4.8 7.2 4.8 3.2" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.left16}}" stroke-width="2.4" stroke-linecap="round"></path>
+            <path d="M8 13.5V9.8C8 7.4 11.2 7.2 11.2 3.2" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.right16}}" stroke-width="2.4" stroke-linecap="round"></path>
+            <g opacity="{{s.both}}"><path d="M8 13.5V9.8C8 7.4 4.8 7.2 4.8 3.2M8 9.8C8 7.4 11.2 7.2 11.2 3.2" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></g>
+            <path d="M8 13.5V3.2" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.straight}}" stroke-width="2.4" stroke-linecap="round"></path>
+          </svg>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5C5B55;">48 · 32 · 16</span>
+        </div>
+        <div style="font-size: 13px; color: #5C5B55; line-height: 1.6;">{{s.desc}}</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="font-size: 13px; font-weight: 500; color: #5C5B55;">工具栏实际大小预览</div>
+    <div style="display: flex; gap: 20px;">
+      <div style="display: flex; align-items: center; gap: 14px; height: 40px; padding: 0 16px; background: #EDEDEA; border-radius: 10px;">
+        <span style="width: 220px; height: 24px; border-radius: 12px; background: #FFFFFF;"></span>
+        <sc-for list="{{states}}" as="s" hint-placeholder-count="4">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="0" y="0" width="16" height="16" rx="4" fill="{{s.tile}}"></rect>
+            <path d="M8 13.5V9.8C8 7.4 4.8 7.2 4.8 3.2" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.left16}}" stroke-width="2.4" stroke-linecap="round"></path>
+            <path d="M8 13.5V9.8C8 7.4 11.2 7.2 11.2 3.2" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.right16}}" stroke-width="2.4" stroke-linecap="round"></path>
+            <g opacity="{{s.both}}"><path d="M8 13.5V9.8C8 7.4 4.8 7.2 4.8 3.2M8 9.8C8 7.4 11.2 7.2 11.2 3.2" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></g>
+            <path d="M8 13.5V3.2" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.straight}}" stroke-width="2.4" stroke-linecap="round"></path>
+          </svg>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: center; gap: 14px; height: 40px; padding: 0 16px; background: #2B2B28; border-radius: 10px;">
+        <span style="width: 220px; height: 24px; border-radius: 12px; background: #3C3C38;"></span>
+        <sc-for list="{{states}}" as="s" hint-placeholder-count="4">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="0" y="0" width="16" height="16" rx="4" fill="{{s.tile}}"></rect>
+            <path d="M8 13.5V9.8C8 7.4 4.8 7.2 4.8 3.2" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.left16}}" stroke-width="2.4" stroke-linecap="round"></path>
+            <path d="M8 13.5V9.8C8 7.4 11.2 7.2 11.2 3.2" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.right16}}" stroke-width="2.4" stroke-linecap="round"></path>
+            <g opacity="{{s.both}}"><path d="M8 13.5V9.8C8 7.4 4.8 7.2 4.8 3.2M8 9.8C8 7.4 11.2 7.2 11.2 3.2" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></g>
+            <path d="M8 13.5V3.2" fill="none" stroke="#FFFFFF" stroke-opacity="{{s.straight}}" stroke-width="2.4" stroke-linecap="round"></path>
+          </svg>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      states: [
+        { label: '正常', tile: '#2B59C3', left: 0.38, right: 1, left16: 0.45, right16: 1, both: 0, straight: 0,
+          desc: '智能分流或全部代理，经默认客户端。右轨亮起。' },
+        { label: '已切到备用', tile: '#B8650A', left: 1, right: 0.38, left16: 1, right16: 0.45, both: 0, straight: 0,
+          desc: '默认客户端离线，已走备用。亮轨换到左边，底色变橙。' },
+        { label: '直连', tile: '#6B6A64', left: 0, right: 0, left16: 0, right16: 0, both: 0, straight: 1,
+          desc: '不使用代理。轨道拉直，底色变灰。' },
+        { label: '异常', tile: '#B3261E', left: 0, right: 0, left16: 0, right16: 0, both: 0.4, straight: 0,
+          desc: '被其他扩展接管、Chrome 拦截或全部离线。两条轨都暗，底色变红。' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generatePac · 稳定性 > 快照 1`] = `
+"// Turnout 1.0.0 88977027 epoch=0
+var PROBES = {
+"canary":"PROXY 127.0.0.1:9",
+"h7890":"PROXY 127.0.0.1:7890",
+"s10808":"SOCKS5 127.0.0.1:10808"
+};
+function probe(url, host) {
+  if (host !== "connectivitycheck.gstatic.com") return "";
+  var m = /[?&]turnout_probe=([0-9a-z]+)/.exec(url);
+  if (m && Object.prototype.hasOwnProperty.call(PROBES, m[1])) return PROBES[m[1]];
+  return "";
+}
+function isLocal(host) {
+  return isPlainHostName(host) || host === "127.0.0.1" || host === "localhost" || host === "[::1]" || host === "::1";
+}
+var ROUTE = "PROXY 127.0.0.1:7890; PROXY 127.0.0.1:7892";
+var EXCEPT = {
+"ads.google.com":1
+};
+var MATCH = {
+"constructor.io":1,
+"google.com":1,
+"xn--fsqu00a.cn":1
+};
+var REGEX = [new RegExp("^https?:\\\\/\\\\/[^\\\\/]+blogspot\\\\.")];
+function hit(t, h) {
+  for (;;) {
+    if (Object.prototype.hasOwnProperty.call(t, h)) return true;
+    var i = h.indexOf(".");
+    if (i < 0) return false;
+    h = h.substring(i + 1);
+  }
+}
+function FindProxyForURL(url, host) {
+  var p = probe(url, host);
+  if (p) return p;
+  if (isLocal(host)) return "DIRECT";
+  host = host.toLowerCase();
+  if (hit(EXCEPT, host)) return "DIRECT";
+  if (hit(MATCH, host)) return ROUTE;
+  for (var i = 0; i < REGEX.length; i++) if (REGEX[i].test(url)) return ROUTE;
+  return "DIRECT";
+}
+"
+`;

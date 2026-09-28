@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>设置 · 客户端</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Noto+Sans+SC:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"IBM Plex Sans","Noto Sans SC",system-ui,sans-serif;color:#1B1B18;background:#F6F6F3}
+a{color:#2B59C3}a:hover{color:#1E4296}
+button,input,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 820px; box-sizing: border-box; background: #F6F6F3; display: flex; font-size: 14px;">
+  <nav aria-label="设置" style="width: 240px; box-sizing: border-box; padding: 24px 16px; background: #FFFFFF; border-right: 1px solid #E3E2DC; display: flex; flex-direction: column; gap: 4px;">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 8px 20px;">
+      <svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true"><rect x="0.5" y="0.5" width="15" height="15" rx="4" fill="#2B59C3"></rect><path d="M8 13.2V9.8C8 7.4 5 7.2 5 3.8" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"></path><path d="M8 13.2V9.8C8 7.4 11 7.2 11 3.8" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"></path></svg>
+      <span style="font-size: 15px; font-weight: 600;">Turnout</span>
+    </div>
+    <a href="SettingsClients.dc.html" aria-current="page" style="display: flex; align-items: center; height: 40px; padding: 0 12px; border-radius: 8px; background: #EAF0FC; color: #1E4296; font-weight: 600; text-decoration: none;">客户端与备用</a>
+    <a href="SettingsRules.dc.html" style="display: flex; align-items: center; height: 40px; padding: 0 12px; border-radius: 8px; color: #3D3C38; text-decoration: none;">规则订阅</a>
+    <a href="#" style="display: flex; align-items: center; height: 40px; padding: 0 12px; border-radius: 8px; color: #3D3C38; text-decoration: none;">备份与导入</a>
+    <a href="#" style="display: flex; align-items: center; height: 40px; padding: 0 12px; border-radius: 8px; color: #3D3C38; text-decoration: none;">关于与隐私</a>
+    <div style="margin-top: auto; padding: 0 12px; font-size: 12px; color: #5C5B55; line-height: 1.6;">版本 [x.y.z] · 开源<br>不收集任何使用数据</div>
+  </nav>
+
+  <main style="flex-grow: 1; padding: 32px 48px; display: flex; flex-direction: column; gap: 28px;">
+    <section style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: flex-end; gap: 12px;">
+        <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+          <h1 style="margin: 0; font-size: 22px; font-weight: 600;">客户端</h1>
+          <p style="margin: 0; font-size: 13px; color: #5C5B55;">本机上提供代理的程序。分流规则对所有客户端统一生效，切换时无需重新配置。</p>
+        </div>
+        <button style="height: 36px; padding: 0 14px; border: 1px solid #D4D3CC; border-radius: 8px; background: #FFFFFF; font-size: 13px; color: #1B1B18; cursor: pointer;">重新扫描</button>
+        <button style="height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: #2B59C3; color: #FFFFFF; font-size: 13px; font-weight: 500; cursor: pointer;">手动添加</button>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E2DC; border-radius: 12px; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: 2fr 2fr 1.4fr 1fr 1fr 1.2fr; gap: 16px; padding: 10px 20px; background: #FAFAF8; border-bottom: 1px solid #E3E2DC; font-size: 12px; color: #5C5B55; font-weight: 500;">
+          <span>名称</span><span>地址</span><span>类型</span><span>状态</span><span>延迟</span><span style="text-align: right;">操作</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 2fr 2fr 1.4fr 1fr 1fr 1.2fr; gap: 16px; align-items: center; padding: 14px 20px; border-bottom: 1px solid #EEEDE8;">
+          <span style="display: flex; align-items: center; gap: 8px; font-weight: 500;">FlClash <span style="font-size: 11px; color: #2B59C3; background: #EAF0FC; padding: 2px 8px; border-radius: 10px; font-weight: 400;">默认</span></span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px;">127.0.0.1:7890</span>
+          <span style="font-size: 13px; color: #3D3C38;">HTTP/SOCKS 混合</span>
+          <span style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #1D7A4B;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #1D7A4B;"></span>在线</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #3D3C38;">86 ms</span>
+          <span style="display: flex; justify-content: flex-end; gap: 4px;">
+            <button style="height: 30px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #2B59C3; font-size: 13px; cursor: pointer;">编辑</button>
+            <button style="height: 30px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #5C5B55; font-size: 13px; cursor: pointer;">删除</button>
+          </span>
+        </div>
+        <div style="display: grid; grid-template-columns: 2fr 2fr 1.4fr 1fr 1fr 1.2fr; gap: 16px; align-items: center; padding: 14px 20px;">
+          <span style="font-weight: 500;">万达云</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px;">127.0.0.1:[端口]</span>
+          <span style="font-size: 13px; color: #3D3C38;">[类型]</span>
+          <span style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #1D7A4B;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #1D7A4B;"></span>在线</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #3D3C38;">142 ms</span>
+          <span style="display: flex; justify-content: flex-end; gap: 4px;">
+            <button style="height: 30px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #2B59C3; font-size: 13px; cursor: pointer;">设为默认</button>
+            <button style="height: 30px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #2B59C3; font-size: 13px; cursor: pointer;">编辑</button>
+          </span>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: #5C5B55;">提示：两个客户端不能使用同一个端口。若都默认 7890，请在其中一个客户端里改成其他端口。</div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 14px;">
+      <h2 style="margin: 0; font-size: 17px; font-weight: 600;">备用与回落</h2>
+      <div style="background: #FFFFFF; border: 1px solid #E3E2DC; border-radius: 12px; display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; gap: 24px; padding: 18px 20px; border-bottom: 1px solid #EEEDE8;">
+          <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+            <label for="backup" style="font-weight: 500;">备用客户端</label>
+            <span style="font-size: 13px; color: #5C5B55;">当前客户端连不上时，浏览器立即改走备用，不用等后台检测。</span>
+          </div>
+          <select id="backup" style="width: 220px; height: 38px; padding: 0 10px; border: 1px solid #D4D3CC; border-radius: 8px; background: #FFFFFF; font-size: 14px; color: #1B1B18;">
+            <option>万达云</option>
+            <option>不使用备用</option>
+          </select>
+        </div>
+        <div style="display: flex; align-items: center; gap: 24px; padding: 18px 20px; border-bottom: 1px solid #EEEDE8;">
+          <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+            <label for="direct" style="font-weight: 500;">所有客户端都离线时改为直连</label>
+            <span style="font-size: 13px; color: #5C5B55;">默认关闭：宁可打不开，也不悄悄暴露真实 IP。开启后弹窗会显示橙色提醒。</span>
+          </div>
+          <input type="checkbox" id="direct" role="switch" style="width: 40px; height: 22px; accent-color: #2B59C3;">
+        </div>
+        <div style="display: flex; align-items: center; gap: 24px; padding: 18px 20px;">
+          <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+            <label for="back" style="font-weight: 500;">默认客户端恢复后自动切回</label>
+            <span style="font-size: 13px; color: #5C5B55;">关闭时只提示，由你决定何时切回。</span>
+          </div>
+          <input type="checkbox" id="back" role="switch" style="width: 40px; height: 22px; accent-color: #2B59C3;">
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

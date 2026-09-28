@@ -1,0 +1,18 @@
+{
+  "Finch 默认": {
+    "https://example.com/": 200,
+    "https://www.baidu.com/": 200,
+    "http://www.baidu.com/": 200,
+    "baidu 页内 fetch https://www.baidu.com/favicon.ico": 200,
+    "baidu 页内 fetch http://127.0.0.1:7890/（公网页→本机，参照）": "ERR TypeError: Failed to fetch",
+    "tunnel": ["CONNECT example.com:443", "CONNECT example.com:443", "CONNECT www.baidu.com:443", "CONNECT www.baidu.com:443", "CONNECT www.baidu.com:443"]
+  },
+  "强制 Blocking": {
+    "https://example.com/": 200,
+    "https://www.baidu.com/": 200,
+    "http://www.baidu.com/": 200,
+    "baidu 页内 fetch https://www.baidu.com/favicon.ico": 200,
+    "baidu 页内 fetch http://127.0.0.1:7890/（公网页→本机，参照）": "ERR TypeError: Failed to fetch",
+    "tunnel": ["CONNECT example.com:443", "CONNECT example.com:443", "CONNECT www.baidu.com:443", "CONNECT www.baidu.com:443", "CONNECT www.baidu.com:443"]
+  }
+}

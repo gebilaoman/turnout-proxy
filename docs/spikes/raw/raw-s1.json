@@ -1,0 +1,240 @@
+{
+  "version": "154.0.8037.58",
+  "cases": {
+    "http query → 18081": {
+      "res": {
+        "ok": true,
+        "status": 204,
+        "type": "cors",
+        "via": "18081",
+        "ms": 149
+      },
+      "proxyHits": [
+        "18081 GET http://probe.turnout.test/generate_204?turnout_probe=18081"
+      ]
+    },
+    "http query → 18082": {
+      "res": {
+        "ok": true,
+        "status": 204,
+        "type": "cors",
+        "via": "18082",
+        "ms": 2
+      },
+      "proxyHits": [
+        "18082 GET http://probe.turnout.test/generate_204?a=1&turnout_probe=18082"
+      ]
+    },
+    "https query（预期被剥离，落到 18083）": {
+      "res": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 4
+      },
+      "proxyHits": [
+        "18083 CONNECT probe.turnout.test:443"
+      ]
+    },
+    "真实 gstatic 经 FlClash(PROXY) cors": {
+      "res": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 211
+      },
+      "proxyHits": []
+    },
+    "真实 gstatic 经 FlClash(PROXY) no-cors": {
+      "res": {
+        "ok": true,
+        "status": 0,
+        "type": "opaque",
+        "via": null,
+        "ms": 242
+      },
+      "proxyHits": []
+    },
+    "真实 gstatic 经 FlClash(SOCKS5) no-cors": {
+      "res": {
+        "ok": true,
+        "status": 0,
+        "type": "opaque",
+        "via": null,
+        "ms": 282
+      },
+      "proxyHits": []
+    },
+    "SS privoxy 1087（端口在、上游坏）": {
+      "res": {
+        "ok": true,
+        "status": 0,
+        "type": "opaque",
+        "via": null,
+        "ms": 27
+      },
+      "proxyHits": []
+    },
+    "SS ss-local 1086 SOCKS5（端口在、上游坏）": {
+      "res": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 4
+      },
+      "proxyHits": []
+    },
+    "死端口 18089 单一代理（预期失败、不能直连）": {
+      "res": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 5
+      },
+      "proxyHits": []
+    },
+    "FlClash 延迟 10 次(ms)": {
+      "lat": [
+        207,
+        271,
+        326,
+        203,
+        248,
+        186,
+        190,
+        189,
+        185,
+        208
+      ]
+    },
+    "18084 未启动": {
+      "res": {
+        "ok": false,
+        "error": "TypeError: Failed to fetch",
+        "name": "TypeError",
+        "ms": 6
+      },
+      "proxyHits": [
+        "18083 CONNECT android.clients.google.com:443"
+      ]
+    },
+    "18084 启动后立即再探（不重设 PAC）": {
+      "res": {
+        "ok": true,
+        "status": 204,
+        "type": "cors",
+        "via": "18084",
+        "ms": 7
+      },
+      "proxyHits": [
+        "18084 GET http://probe.turnout.test/generate_204?turnout_probe=18084&n=2"
+      ]
+    },
+    "回落：主死 → 应走备 18082": {
+      "res": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "via": "18082",
+        "ms": 11
+      },
+      "proxyHits": [
+        "18082 GET http://site.turnout.test/a"
+      ]
+    },
+    "回落：主恢复，不重设 PAC": {
+      "res": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "via": "18082",
+        "ms": 2
+      },
+      "proxyHits": [
+        "18082 GET http://site.turnout.test/b"
+      ]
+    },
+    "回落：主恢复 3 秒后，不重设 PAC": {
+      "res": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "via": "18082",
+        "ms": 4
+      },
+      "proxyHits": [
+        "18082 GET http://site.turnout.test/c"
+      ]
+    },
+    "回落：重设 PAC（内容变化）后": {
+      "res": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "via": "18085",
+        "ms": 23
+      },
+      "proxyHits": [
+        "18085 GET http://site.turnout.test/d"
+      ]
+    },
+    "回落：主再次死亡": {
+      "res": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "via": "18082",
+        "ms": 15
+      },
+      "proxyHits": [
+        "18082 GET http://site.turnout.test/e"
+      ]
+    },
+    "回落：主恢复，重设\"相同内容\"PAC 后": {
+      "res": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "via": "18082",
+        "ms": 2
+      },
+      "proxyHits": [
+        "18082 GET http://site.turnout.test/f"
+      ]
+    },
+    "回落：先 direct 再设回相同 PAC 后": {
+      "res": {
+        "ok": true,
+        "status": 200,
+        "type": "cors",
+        "via": "18085",
+        "ms": 87
+      },
+      "proxyHits": [
+        "18085 GET http://site.turnout.test/g"
+      ]
+    }
+  },
+  "log": [
+    {
+      "details": "",
+      "error": "net::ERR_TUNNEL_CONNECTION_FAILED",
+      "fatal": true
+    },
+    {
+      "details": "",
+      "error": "net::ERR_PROXY_CONNECTION_FAILED",
+      "fatal": true
+    },
+    {
+      "details": "",
+      "error": "net::ERR_TUNNEL_CONNECTION_FAILED",
+      "fatal": true
+    },
+    {
+      "details": "",
+      "error": "net::ERR_PROXY_CONNECTION_FAILED",
+      "fatal": true
+    }
+  ]
+}

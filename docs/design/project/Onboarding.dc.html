@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>首次引导 · 发现客户端</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Noto+Sans+SC:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"IBM Plex Sans","Noto Sans SC",system-ui,sans-serif;color:#1B1B18;background:#F6F6F3}
+a{color:#2B59C3}a:hover{color:#1E4296}
+button,input,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 960px; height: 680px; box-sizing: border-box; background: #F6F6F3; display: flex; flex-direction: column; align-items: center; padding: 40px 0; font-size: 14px;">
+  <div style="width: 640px; display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <svg width="26" height="26" viewBox="0 0 16 16" aria-hidden="true"><rect x="0.5" y="0.5" width="15" height="15" rx="4" fill="#2B59C3"></rect><path d="M8 13.2V9.8C8 7.4 5 7.2 5 3.8" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"></path><path d="M8 13.2V9.8C8 7.4 11 7.2 11 3.8" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"></path></svg>
+      <div style="font-size: 16px; font-weight: 600;">Turnout</div>
+    </div>
+
+    <ol style="margin: 0; padding: 0; list-style: none; display: flex; gap: 8px; font-size: 13px;">
+      <li style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: #2B59C3;"></span><span style="color: #1B1B18; font-weight: 600;">1 · 发现客户端</span></li>
+      <li style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: #DAD9D3;"></span><span style="color: #5C5B55;">2 · 选择分流规则</span></li>
+      <li style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: #DAD9D3;"></span><span style="color: #5C5B55;">3 · 完成</span></li>
+    </ol>
+
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 600;">在本机发现 2 个代理客户端</h1>
+      <p style="margin: 0; font-size: 14px; color: #5C5B55; line-height: 1.6;">已扫描 7890、7897、10808、10809、1080、8888 等常用端口。给它们起个好认的名字，第一个勾选的会作为默认出口。</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 16px; padding: 14px 16px; background: #FFFFFF; border: 1px solid #2B59C3; border-radius: 12px;">
+        <input type="checkbox" checked="" id="c1" aria-label="使用这个客户端" style="width: 18px; height: 18px; accent-color: #2B59C3;">
+        <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+          <label for="n1" style="font-size: 12px; color: #5C5B55;">名称</label>
+          <input id="n1" value="FlClash" style="height: 36px; padding: 0 10px; border: 1px solid #D4D3CC; border-radius: 8px; font-size: 14px; background: #FFFFFF; color: #1B1B18;">
+        </div>
+        <div style="width: 180px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px;">127.0.0.1:7890</span>
+          <span style="font-size: 12px; color: #5C5B55;">HTTP + SOCKS 混合端口</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; width: 88px;">
+          <span style="font-size: 12px; color: #1D7A4B; font-weight: 500;">可用</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #5C5B55;">86 ms</span>
+        </div>
+        <span style="font-size: 11px; color: #2B59C3; background: #EAF0FC; padding: 2px 8px; border-radius: 10px;">默认</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 16px; padding: 14px 16px; background: #FFFFFF; border: 1px solid #E3E2DC; border-radius: 12px;">
+        <input type="checkbox" checked="" id="c2" aria-label="使用这个客户端" style="width: 18px; height: 18px; accent-color: #2B59C3;">
+        <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px;">
+          <label for="n2" style="font-size: 12px; color: #5C5B55;">名称</label>
+          <input id="n2" value="万达云" style="height: 36px; padding: 0 10px; border: 1px solid #D4D3CC; border-radius: 8px; font-size: 14px; background: #FFFFFF; color: #1B1B18;">
+        </div>
+        <div style="width: 180px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px;">127.0.0.1:[端口]</span>
+          <span style="font-size: 12px; color: #5C5B55;">[识别出的类型]</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; width: 88px;">
+          <span style="font-size: 12px; color: #1D7A4B; font-weight: 500;">可用</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #5C5B55;">142 ms</span>
+        </div>
+        <span style="font-size: 11px; color: #5C5B55; background: #F0EFEA; padding: 2px 8px; border-radius: 10px;">备用</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; border: 1px dashed #C9C8C1; border-radius: 12px; font-size: 13px; color: #5C5B55;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5C5B55" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+        <span style="flex-grow: 1;">没找到你的客户端？在客户端设置里查看它的端口，然后</span>
+        <button style="height: 32px; padding: 0 12px; border: 1px solid #D4D3CC; border-radius: 8px; background: #FFFFFF; font-size: 13px; color: #1B1B18; cursor: pointer;">手动添加</button>
+        <button style="height: 32px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; font-size: 13px; color: #2B59C3; cursor: pointer;">重新扫描</button>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 8px;">
+      <a href="#" style="font-size: 13px; text-decoration: none;">从 ZeroOmega / SwitchyOmega 导入</a>
+      <div style="flex-grow: 1;"></div>
+      <button style="height: 40px; padding: 0 28px; border: 0; border-radius: 10px; background: #2B59C3; color: #FFFFFF; font-size: 14px; font-weight: 500; cursor: pointer;">下一步</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":960,"height":680}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

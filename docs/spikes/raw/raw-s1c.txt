@@ -1,0 +1,20 @@
+# 从会话记录恢复（原为 console.table 输出）
+# u | ok | status/error | ms
+cp.cloudflare.com?turnout_probe=7890 | False | TypeError: Failed to fetch | 601
+cp.cloudflare.com?turnout_probe=7890s | False | TypeError: Failed to fetch | 210
+www.gstatic.com?turnout_probe=7890 | False | AbortError | 5004
+cp.cloudflare.com?turnout_probe=7890 | False | TypeError: Failed to fetch | 203
+cp.cloudflare.com?turnout_probe=7890s | False | TypeError: Failed to fetch | 202
+www.gstatic.com?turnout_probe=7890 | False | AbortError | 5002
+cp.cloudflare.com?turnout_probe=7890 | False | TypeError: Failed to fetch | 482
+cp.cloudflare.com?turnout_probe=7890s | False | TypeError: Failed to fetch | 202
+www.gstatic.com?turnout_probe=7890 | True | 204 | 3261
+cp.cloudflare.com?turnout_probe=7890 | False | TypeError: Failed to fetch | 204
+cp.cloudflare.com?turnout_probe=7890s | False | TypeError: Failed to fetch | 205
+www.gstatic.com?turnout_probe=7890 | True | 204 | 223
+cp.cloudflare.com?turnout_probe=7890 | False | TypeError: Failed to fetch | 367
+cp.cloudflare.com?turnout_probe=7890s | False | TypeError: Failed to fetch | 200
+www.gstatic.com?turnout_probe=7890 | True | 204 | 232
+cp.cloudflare.com?turnout_probe=7890 | False | TypeError: Failed to fetch | 217
+cp.cloudflare.com?turnout_probe=7890s | False | TypeError: Failed to fetch | 206
+www.gstatic.com?turnout_probe=7890 | True | 204 | 215

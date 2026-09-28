@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>设置 · 规则订阅</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Noto+Sans+SC:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"IBM Plex Sans","Noto Sans SC",system-ui,sans-serif;color:#1B1B18;background:#F6F6F3}
+a{color:#2B59C3}a:hover{color:#1E4296}
+button,input,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 820px; box-sizing: border-box; background: #F6F6F3; display: flex; font-size: 14px;">
+  <nav aria-label="设置" style="width: 240px; box-sizing: border-box; padding: 24px 16px; background: #FFFFFF; border-right: 1px solid #E3E2DC; display: flex; flex-direction: column; gap: 4px;">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 8px 20px;">
+      <svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true"><rect x="0.5" y="0.5" width="15" height="15" rx="4" fill="#2B59C3"></rect><path d="M8 13.2V9.8C8 7.4 5 7.2 5 3.8" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"></path><path d="M8 13.2V9.8C8 7.4 11 7.2 11 3.8" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"></path></svg>
+      <span style="font-size: 15px; font-weight: 600;">Turnout</span>
+    </div>
+    <a href="SettingsClients.dc.html" style="display: flex; align-items: center; height: 40px; padding: 0 12px; border-radius: 8px; color: #3D3C38; text-decoration: none;">客户端与备用</a>
+    <a href="SettingsRules.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border-radius: 8px; background: #EAF0FC; color: #1E4296; font-weight: 600; text-decoration: none;">规则订阅<span style="width: 8px; height: 8px; border-radius: 50%; background: #A85A06;" aria-label="有问题"></span></a>
+    <a href="#" style="display: flex; align-items: center; height: 40px; padding: 0 12px; border-radius: 8px; color: #3D3C38; text-decoration: none;">备份与导入</a>
+    <a href="#" style="display: flex; align-items: center; height: 40px; padding: 0 12px; border-radius: 8px; color: #3D3C38; text-decoration: none;">关于与隐私</a>
+    <div style="margin-top: auto; padding: 0 12px; font-size: 12px; color: #5C5B55; line-height: 1.6;">版本 [x.y.z] · 开源<br>不收集任何使用数据</div>
+  </nav>
+
+  <main style="flex-grow: 1; padding: 32px 48px; display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 600;">规则订阅</h1>
+      <p style="margin: 0; font-size: 13px; color: #5C5B55;">「智能分流」模式下，命中规则的网站走当前客户端，其余直连。一份规则，所有客户端通用。</p>
+    </div>
+
+    <div role="status" style="display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; background: #FBF0E1; border: 1px solid #E9C58F; border-radius: 12px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A85A06" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>
+      <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-weight: 600; color: #7A4104;">今天 [时间] 更新失败：连接订阅地址超时</div>
+        <div style="font-size: 13px; color: #6B3A05; line-height: 1.5;">分流仍在正常工作，正在使用 [上次成功日期] 的版本。订阅地址本身可能需要代理才能访问，可以尝试「通过当前客户端更新」。</div>
+      </div>
+      <button style="height: 34px; padding: 0 14px; border: 1px solid #A85A06; border-radius: 8px; background: #FFFFFF; color: #7A4104; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap;">通过当前客户端更新</button>
+      <button style="height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #7A4104; font-size: 13px; cursor: pointer;">重试</button>
+    </div>
+
+    <section style="background: #FFFFFF; border: 1px solid #E3E2DC; border-radius: 12px; display: flex; flex-direction: column;">
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 20px; border-bottom: 1px solid #EEEDE8;">
+        <div style="font-weight: 500;">规则来源</div>
+        <div style="display: flex; gap: 12px;">
+          <label style="flex-grow: 1; display: flex; align-items: flex-start; gap: 10px; padding: 14px; border: 1px solid #2B59C3; background: #EAF0FC; border-radius: 10px; cursor: pointer;">
+            <input type="radio" name="src" checked="" style="margin-top: 3px; accent-color: #2B59C3;">
+            <span style="display: flex; flex-direction: column; gap: 4px;">
+              <span style="font-weight: 500;">内置默认规则</span>
+              <span style="font-size: 13px; color: #3D3C38;">[默认规则名]，开箱即用，扩展内自带一份离线副本</span>
+            </span>
+          </label>
+          <label style="flex-grow: 1; display: flex; align-items: flex-start; gap: 10px; padding: 14px; border: 1px solid #E3E2DC; border-radius: 10px; cursor: pointer;">
+            <input type="radio" name="src" style="margin-top: 3px; accent-color: #2B59C3;">
+            <span style="display: flex; flex-direction: column; gap: 4px;">
+              <span style="font-weight: 500;">自定义订阅地址</span>
+              <span style="font-size: 13px; color: #5C5B55;">支持 AutoProxy / GFWList 格式</span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 20px; border-bottom: 1px solid #EEEDE8;">
+        <label for="url" style="font-weight: 500;">订阅地址</label>
+        <input id="url" value="[默认规则订阅地址]" readonly="" style="height: 38px; padding: 0 12px; border: 1px solid #D4D3CC; border-radius: 8px; background: #FAFAF8; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #3D3C38;">
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 12px; color: #5C5B55;">上次成功更新</span>
+          <span style="font-weight: 500;">[上次成功日期]</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 12px; color: #5C5B55;">规则条数</span>
+          <span style="font-weight: 500;">[条数]</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label for="freq" style="font-size: 12px; color: #5C5B55;">自动更新</label>
+          <select id="freq" style="height: 34px; padding: 0 10px; border: 1px solid #D4D3CC; border-radius: 8px; background: #FFFFFF; font-size: 14px; color: #1B1B18; width: 160px;">
+            <option>每天</option>
+            <option>每周</option>
+            <option>不自动更新</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <div style="padding: 14px 18px; border: 1px dashed #C9C8C1; border-radius: 12px; font-size: 13px; color: #5C5B55; line-height: 1.5;">
+      按网站手动指定（例如某个网站强制直连）将在第二版提供。
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+/* 设计 token（docs/design/README.md，浅色）。深色主题尚未设计。 */
+:root {
+  --bg: #f6f6f3;
+  --surface: #ffffff;
+  --surface-2: #fafaf8;
+  --seg-bg: #ebeae5;
+  --border: #e3e2dc;
+  --border-input: #d4d3cc;
+  --border-soft: #eeede8;
+  --border-dashed: #c9c8c1;
+  --text: #1b1b18;
+  --text-2: #5c5b55;
+  --text-3: #3d3c38;
+  --muted: #a7a69f;
+  --accent: #2b59c3;
+  --accent-bg: #eaf0fc;
+  --accent-hover: #1e4296;
+  --ok: #1d7a4b;
+  --warn: #a85a06;
+  --warn-strong: #7a4104;
+  --warn-text: #6b3a05;
+  --warn-bg: #fbf0e1;
+  --warn-border: #e9c58f;
+  --err: #b3261e;
+  --err-strong: #8c1d17;
+  --err-text: #6e1712;
+  --err-bg: #fbeae8;
+  --err-border: #e8b4ae;
+  --font-sans: 'IBM Plex Sans', 'Noto Sans SC', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--font-sans); color: var(--text); background: var(--bg); }
+a { color: var(--accent); }
+a:hover { color: var(--accent-hover); }
+button, input, select { font-family: inherit; }
+button:disabled { cursor: not-allowed; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
